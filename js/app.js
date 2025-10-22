@@ -58,7 +58,9 @@ function addToCart(productId) {
   const key = String(productId);
   cart.set(key, (cart.get(key) || 0) + 1);
   saveCart(cart);
-  alert('Product added to cart!');
+  // A simple, non-blocking notification instead of an alert
+  showToast('Product added to cart!');
+  updateCartCounter();
 }
 
 /**
@@ -69,6 +71,7 @@ function removeFromCart(productId) {
   const cart = getCart();
   cart.delete(String(productId));
   saveCart(cart);
+  updateCartCounter();
 }
 
 /**
@@ -83,6 +86,7 @@ function updateCartQuantity(productId, quantity) {
     const cart = getCart();
     cart.set(String(productId), quantity);
     saveCart(cart);
+    updateCartCounter();
   }
 }
 
@@ -91,6 +95,7 @@ function updateCartQuantity(productId, quantity) {
  */
 function clearCart() {
   localStorage.removeItem('cart');
+  updateCartCounter();
 }
 
 // --- Product & UI Rendering ---
@@ -183,6 +188,39 @@ async function renderCart(container, totalSpan) {
   if (totalSpan) totalSpan.textContent = total.toFixed(2);
 }
 
+/**
+ * Shows a simple toast notification.
+ * @param {string} message The message to display.
+ */
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => toast.classList.add('show'), 10);
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.addEventListener('transitionend', () => toast.remove());
+  }, 3000);
+}
+
+/**
+ * Updates the cart counter in the header.
+ */
+function updateCartCounter() {
+  const counter = document.querySelector('.cart-count');
+  if (!counter) return;
+
+  const cart = getCart();
+  const totalItems = Array.from(cart.values()).reduce((sum, qty) => sum + qty, 0);
+
+  counter.textContent = `(${totalItems})`;
+  counter.style.display = totalItems > 0 ? 'inline' : 'none';
+}
+
 // --- Event Handlers & Page Initializers ---
 
 /**
@@ -192,8 +230,41 @@ async function initMainPage() {
   const container = document.getElementById('product-list-container');
   if (!container) return;
 
+  // Initial loading state
+  container.innerHTML = '<p>Loading products...</p>';
+
   const productList = await fetchProducts();
-  renderProducts(productList, container);
+
+  // Group products by category
+  const productsByCategory = productList.reduce((acc, product) => {
+    const category = product.category || 'Uncategorized';
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(product);
+    return acc;
+  }, {});
+
+  // Clear the main container once
+  container.innerHTML = '';
+
+  // Render products for each category
+  for (const category in productsByCategory) {
+    const categorySection = document.createElement('section');
+    categorySection.className = 'category-section';
+
+    const categoryTitle = document.createElement('h2');
+    categoryTitle.className = 'category-title';
+    categoryTitle.textContent = category;
+    categorySection.appendChild(categoryTitle);
+
+    const productGridContainer = document.createElement('div');
+    // This container will be populated by renderProducts
+    renderProducts(productsByCategory[category], productGridContainer);
+    categorySection.appendChild(productGridContainer);
+
+    container.appendChild(categorySection);
+  }
 
   container.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-to-cart');
@@ -284,13 +355,17 @@ async function initCheckoutForm() {
     const encoded = encodeURIComponent(message);
     const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encoded}`;
 
-    clearCart();
+    // IMPORTANT UX CHANGE: Do not clear the cart automatically.
+    // The user might close the WhatsApp tab without sending.
+    // Let them keep their cart. You can add a "Order Sent! Clear Cart?" button on the page.
+    // clearCart(); 
     window.location.href = waUrl;
   });
 }
 
 // --- App Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
+  updateCartCounter(); // Update counter on every page load
   initMainPage();
   initCartPage();
   initCheckoutForm();
