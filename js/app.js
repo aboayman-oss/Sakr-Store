@@ -1,269 +1,297 @@
-// Placeholder JavaScript for Sakr Store
-console.log('Sakr Store app.js loaded');
+// Sakr Store App Logic
 
-// Fetch products.json and log (keep for debugging)
-fetch('products.json')
-  .then(res => res.json())
-  .then(data => console.log('Products loaded', data))
-  .catch(err => console.error('Failed to load products', err));
+// --- Configuration ---
+const config = {
+  whatsappNumber: '201024496178',
+};
 
-// Render products into the main products container
-function renderProducts(products, container) {
-  if (!Array.isArray(products) || !container) return;
+// --- State ---
+let products = []; // Cache for product data
 
-  // Clear existing
+// --- Cart Management ---
+
+/**
+ * Retrieves the cart from localStorage.
+ * @returns {Map<string, number>} A map of product IDs to quantities.
+ */
+function getCart() {
+  const raw = localStorage.getItem('cart');
+  try {
+    // Attempt to parse as a Map-like object, or an array for backward compatibility
+    const data = raw ? JSON.parse(raw) : {};
+    if (Array.isArray(data)) {
+      // Convert old array format [1, 1, 2] to new map format {'1': 2, '2': 1}
+      const newCart = new Map();
+      data.forEach(id => {
+        const key = String(id);
+        newCart.set(key, (newCart.get(key) || 0) + 1);
+      });
+      return newCart;
+    }
+    // If it's an object, convert to a Map
+    return new Map(Object.entries(data));
+  } catch (err) {
+    return new Map();
+  }
+}
+
+/**
+ * Saves the cart to localStorage.
+ * @param {Map<string, number>} cart - A map of product IDs to quantities.
+ */
+function saveCart(cart) {
+  try {
+    // Convert Map to a plain object for JSON serialization
+    const obj = Object.fromEntries(cart);
+    localStorage.setItem('cart', JSON.stringify(obj));
+  } catch (err) {
+    console.error('Failed to save cart to localStorage', err);
+  }
+}
+
+/**
+ * Adds a product to the cart or increments its quantity.
+ * @param {string | number} productId - The ID of the product to add.
+ */
+function addToCart(productId) {
+  const cart = getCart();
+  const key = String(productId);
+  cart.set(key, (cart.get(key) || 0) + 1);
+  saveCart(cart);
+  alert('Product added to cart!');
+}
+
+/**
+ * Removes a product from the cart entirely.
+ * @param {string | number} productId - The ID of the product to remove.
+ */
+function removeFromCart(productId) {
+  const cart = getCart();
+  cart.delete(String(productId));
+  saveCart(cart);
+}
+
+/**
+ * Updates the quantity of a product in the cart.
+ * @param {string | number} productId - The ID of the product to update.
+ * @param {number} quantity - The new quantity. If 0, removes the item.
+ */
+function updateCartQuantity(productId, quantity) {
+  if (quantity <= 0) {
+    removeFromCart(productId);
+  } else {
+    const cart = getCart();
+    cart.set(String(productId), quantity);
+    saveCart(cart);
+  }
+}
+
+/**
+ * Clears all items from the cart.
+ */
+function clearCart() {
+  localStorage.removeItem('cart');
+}
+
+// --- Product & UI Rendering ---
+
+/**
+ * Fetches products from the server.
+ * @returns {Promise<Array<object>>} A promise that resolves to the products array.
+ */
+async function fetchProducts() {
+  if (products.length > 0) {
+    return products; // Return from cache
+  }
+  try {
+    const res = await fetch('products.json');
+    if (!res.ok) throw new Error('Network response was not ok');
+    products = await res.json();
+    return products;
+  } catch (err) {
+    console.error('Failed to load products', err);
+    return []; // Return empty on error
+  }
+}
+
+/**
+ * Renders product cards into a container.
+ * @param {Array<object>} productList - The list of products to render.
+ * @param {HTMLElement} container - The element to render into.
+ */
+function renderProducts(productList, container) {
+  if (!container) return;
   container.innerHTML = '';
-
   const grid = document.createElement('div');
   grid.className = 'product-grid';
 
-  products.forEach(p => {
+  productList.forEach(p => {
     const card = document.createElement('article');
     card.className = 'product-card';
-
-    const img = document.createElement('img');
-    img.src = p.image || '';
-    img.alt = p.name || 'Product image';
-    img.className = 'product-image';
-
-    const title = document.createElement('h3');
-    title.textContent = p.name || 'Untitled';
-
-    const desc = document.createElement('p');
-    desc.className = 'product-desc';
-    desc.textContent = p.description || '';
-
-    const price = document.createElement('div');
-    price.className = 'product-price';
-    price.textContent = `$${(Number(p.price) || 0).toFixed(2)}`;
-
-    const btn = document.createElement('button');
-    btn.className = 'add-to-cart';
-    btn.setAttribute('data-product-id', String(p.id));
-    btn.type = 'button';
-    btn.textContent = 'Add to cart';
-
-    card.appendChild(img);
-    card.appendChild(title);
-    card.appendChild(desc);
-    card.appendChild(price);
-    card.appendChild(btn);
-
+    card.innerHTML = `
+      <img src="${p.image || ''}" alt="${p.name || 'Product image'}" class="product-image">
+      <h3>${p.name || 'Untitled'}</h3>
+      <p class="product-desc">${p.description || ''}</p>
+      <div class="product-price">$${(Number(p.price) || 0).toFixed(2)}</div>
+      <button class="add-to-cart" data-product-id="${p.id}" type="button">Add to cart</button>
+    `;
     grid.appendChild(card);
   });
 
   container.appendChild(grid);
 }
 
-// Add to Cart implementation using localStorage
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('product-list-container');
-  if (!container) return; // nothing to do if container isn't present
+/**
+ * Renders the items in the shopping cart.
+ * @param {HTMLElement} container - The cart items container.
+ * @param {HTMLElement} totalSpan - The span for the total price.
+ */
+async function renderCart(container, totalSpan) {
+  const cart = getCart();
+  const allProducts = await fetchProducts();
 
-  container.addEventListener('click', (e) => {
-    const target = e.target;
-    if (!(target instanceof HTMLElement)) return;
-
-    // Look for a button with data-product-id attribute (or a child of it)
-    const btn = target.closest('button[data-product-id]');
-    if (!btn) return; // not an Add to Cart click
-
-    const productIdAttr = btn.getAttribute('data-product-id');
-    if (!productIdAttr) return;
-
-    // Store product IDs as numbers if possible
-    const productId = isNaN(Number(productIdAttr)) ? productIdAttr : Number(productIdAttr);
-
-    // Retrieve current cart from localStorage (array of product ids)
-    const raw = localStorage.getItem('cart');
-    let cart = [];
-    try {
-      cart = raw ? JSON.parse(raw) : [];
-      if (!Array.isArray(cart)) cart = [];
-    } catch (err) {
-      cart = [];
-    }
-
-    // Add the product id to the cart array
-    cart.push(productId);
-
-    // Save updated cart back to localStorage
-    try {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    } catch (err) {
-      console.error('Failed to save cart to localStorage', err);
-      return;
-    }
-
-    // Confirm to user
-    alert('Product added to cart!');
-  });
-});
-
-// Cart page rendering
-document.addEventListener('DOMContentLoaded', () => {
-  const cartContainer = document.getElementById('cart-items-container');
-  if (!cartContainer) return; // not on cart page
-
-  // Retrieve cart (array of product IDs) from localStorage
-  const raw = localStorage.getItem('cart');
-  let cart = [];
-  try {
-    cart = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(cart)) cart = [];
-  } catch (err) {
-    cart = [];
-  }
-
-  // If cart is empty, show a message
-  if (cart.length === 0) {
-    cartContainer.textContent = 'Your cart is empty.';
-    // Ensure total is zero
-    const totalSpan = document.getElementById('total-price');
+  if (cart.size === 0) {
+    container.innerHTML = '<p>Your cart is empty.</p>';
     if (totalSpan) totalSpan.textContent = '0.00';
     return;
   }
 
-  // Fetch products.json and map IDs to full product objects
-  fetch('products.json')
-    .then(res => res.json())
-    .then(products => {
-      // products is an array of product objects
-      let total = 0;
+  container.innerHTML = ''; // Clear previous content
+  let total = 0;
 
-      // Clear container
-      cartContainer.innerHTML = '';
+  for (const [id, qty] of cart.entries()) {
+    const product = allProducts.find(p => String(p.id) === id);
+    if (!product) continue;
 
-      cart.forEach(id => {
-        const product = products.find(p => p.id === id || String(p.id) === String(id));
-        if (!product) return; // skip if product not found
+    total += (Number(product.price) || 0) * qty;
 
-        // Create an element to display name and price
-        const itemEl = document.createElement('div');
-        itemEl.className = 'cart-item';
-        itemEl.innerHTML = `<strong>${product.name}</strong> - $${product.price.toFixed(2)}`;
-        cartContainer.appendChild(itemEl);
+    const itemEl = document.createElement('div');
+    itemEl.className = 'cart-item';
+    itemEl.innerHTML = `
+      <span><strong>${product.name}</strong></span>
+      <span>
+        <button class="quantity-change" data-id="${id}" data-change="-1">-</button>
+        ${qty}
+        <button class="quantity-change" data-id="${id}" data-change="1">+</button>
+      </span>
+      <span>$${((Number(product.price) || 0) * qty).toFixed(2)}</span>
+      <button class="remove-item" data-id="${id}">&times;</button>
+    `;
+    container.appendChild(itemEl);
+  }
 
-        total += Number(product.price) || 0;
-      });
+  if (totalSpan) totalSpan.textContent = total.toFixed(2);
+}
 
-      // Update total price span
-      const totalSpan = document.getElementById('total-price');
-      if (totalSpan) totalSpan.textContent = total.toFixed(2);
-    })
-    .catch(err => {
-      console.error('Failed to load products for cart', err);
-      cartContainer.textContent = 'Failed to load cart items.';
-    });
-});
+// --- Event Handlers & Page Initializers ---
 
-// Checkout: handle customer form submission and send order via WhatsApp
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Initializes the main product listing page.
+ */
+async function initMainPage() {
+  const container = document.getElementById('product-list-container');
+  if (!container) return;
+
+  const productList = await fetchProducts();
+  renderProducts(productList, container);
+
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-to-cart');
+    if (btn) {
+      const productId = btn.getAttribute('data-product-id');
+      addToCart(productId);
+    }
+  });
+}
+
+/**
+ * Initializes the shopping cart page.
+ */
+async function initCartPage() {
+  const cartContainer = document.getElementById('cart-items-container');
+  const totalSpan = document.getElementById('total-price');
+  if (!cartContainer) return;
+
+  await renderCart(cartContainer, totalSpan);
+
+  cartContainer.addEventListener('click', (e) => {
+    const target = e.target;
+    const productId = target.getAttribute('data-id');
+
+    if (target.matches('.remove-item')) {
+      removeFromCart(productId);
+      renderCart(cartContainer, totalSpan); // Re-render
+    } else if (target.matches('.quantity-change')) {
+      const change = parseInt(target.getAttribute('data-change'), 10);
+      const cart = getCart();
+      const currentQty = cart.get(productId) || 0;
+      updateCartQuantity(productId, currentQty + change);
+      renderCart(cartContainer, totalSpan); // Re-render
+    }
+  });
+}
+
+/**
+ * Initializes the checkout form.
+ */
+async function initCheckoutForm() {
   const form = document.getElementById('customer-form');
-  if (!form) return; // not on cart page or form missing
+  if (!form) return;
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    // Get customer details
+    const cart = getCart();
+    if (cart.size === 0) {
+      alert('Your cart is empty. Add products before placing an order.');
+      return;
+    }
+
     const formData = new FormData(form);
     const name = (formData.get('name') || '').toString().trim();
     const address = (formData.get('address') || '').toString().trim();
     const phone = (formData.get('phone') || '').toString().trim();
 
-    // Retrieve cart
-    const raw = localStorage.getItem('cart');
-    let cart = [];
-    try {
-      cart = raw ? JSON.parse(raw) : [];
-      if (!Array.isArray(cart)) cart = [];
-    } catch (err) {
-      cart = [];
+    const allProducts = await fetchProducts();
+    const productMap = new Map(allProducts.map(p => [String(p.id), p]));
+
+    let total = 0;
+    const lines = [];
+    for (const [id, qty] of cart.entries()) {
+      const product = productMap.get(id);
+      if (!product) continue;
+      const price = Number(product.price) || 0;
+      total += price * qty;
+      lines.push(`- ${qty}x ${product.name} - $${(price * qty).toFixed(2)}`);
     }
 
-    if (cart.length === 0) {
-      alert('Your cart is empty. Add products before placing an order.');
-      return;
-    }
+    const message = [
+      "Hello! I'd like to place an order.",
+      '',
+      '*My Details:*',
+      `Name: ${name}`,
+      `Address: ${address}`,
+      `Phone: ${phone}`,
+      '',
+      '*Order Summary:*',
+      ...lines,
+      '---------------------',
+      `*Total: $${total.toFixed(2)}*`,
+      '',
+      'Thank you!'
+    ].join('\n');
 
-    // Fetch product details to build the order summary
-    fetch('products.json')
-      .then(res => res.json())
-      .then(products => {
-        // Build a map of id -> product for quick lookup
-        const map = new Map();
-        products.forEach(p => map.set(String(p.id), p));
+    const encoded = encodeURIComponent(message);
+    const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encoded}`;
 
-        // Count quantities
-        const qtyMap = new Map();
-        cart.forEach(id => {
-          const key = String(id);
-          qtyMap.set(key, (qtyMap.get(key) || 0) + 1);
-        });
-
-        let total = 0;
-        let lines = [];
-        for (const [id, qty] of qtyMap.entries()) {
-          const product = map.get(id);
-          if (!product) continue;
-          const price = Number(product.price) || 0;
-          total += price * qty;
-          lines.push(`- ${qty}x ${product.name} - $${(price * qty).toFixed(2)}`);
-        }
-
-        // Build full message
-        const message = [
-          "Hello! I'd like to place an order.",
-          '',
-          '*My Details:*',
-          `Name: ${name}`,
-          `Address: ${address}`,
-          `Phone: ${phone}`,
-          '',
-          '*Order Summary:*',
-          ...lines,
-          '---------------------',
-          `*Total: $${total.toFixed(2)}*`,
-          '',
-          'Thank you!'
-        ].join('\n');
-
-        // WhatsApp number (placeholder)
-        const waNumber = '201024496178';
-
-        // URL encode message
-        const encoded = encodeURIComponent(message);
-
-        const waUrl = `https://wa.me/${waNumber}?text=${encoded}`;
-
-        // Clear cart
-        localStorage.removeItem('cart');
-
-        // Redirect to WhatsApp
-        window.location.href = waUrl;
-      })
-      .catch(err => {
-        console.error('Failed to build order summary', err);
-        alert('Failed to prepare order. Please try again later.');
-      });
+    clearCart();
+    window.location.href = waUrl;
   });
-});
+}
 
-// When on the main page, fetch and render products
+// --- App Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('product-list-container');
-  if (!container) return;
-
-  fetch('products.json')
-    .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    })
-    .then(products => {
-      renderProducts(products, container);
-    })
-    .catch(err => {
-      console.error('Failed to load products for main page', err);
-      container.textContent = 'Failed to load products.';
-    });
+  initMainPage();
+  initCartPage();
+  initCheckoutForm();
 });
