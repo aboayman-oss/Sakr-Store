@@ -9,23 +9,56 @@ const config = {
 function initMobileMenu() {
   const menuToggle = document.getElementById('menu-toggle');
   const menuOverlay = document.getElementById('menu-overlay');
-  const closeButton = document.querySelector('.close-menu');
-  
+  const sidebar = document.getElementById('category-sidebar');
+  const sidebarInner = sidebar ? sidebar.querySelector('.sidebar-inner') : null;
+  const closeButton = sidebar ? sidebar.querySelector('.close-menu') : null;
+
+  if (!menuToggle || !menuOverlay || !sidebar) return; // safety
+
+  function openMenu() {
+    document.body.classList.add('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+    sidebar.setAttribute('aria-hidden', 'false');
+    // move focus into sidebar for accessibility
+    const focusable = sidebar.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  }
+
   function closeMenu() {
     document.body.classList.remove('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    sidebar.setAttribute('aria-hidden', 'true');
+    menuToggle.focus();
   }
-  
+
   function toggleMenu() {
-    document.body.classList.toggle('menu-open');
+    if (document.body.classList.contains('menu-open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   }
-  
+
   menuToggle.addEventListener('click', toggleMenu);
   menuOverlay.addEventListener('click', closeMenu);
-  closeButton.addEventListener('click', closeMenu);
-  
+  if (closeButton) closeButton.addEventListener('click', closeMenu);
+
   // Close menu when a category is selected (on mobile)
-  document.getElementById('category-list').addEventListener('click', (e) => {
-    if (window.innerWidth <= 768) {
+  const categoryList = document.getElementById('category-list');
+  if (categoryList) {
+    categoryList.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeMenu();
+    });
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Ensure menu is closed when resizing to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && document.body.classList.contains('menu-open')) {
       closeMenu();
     }
   });

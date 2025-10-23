@@ -95,26 +95,37 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
     display: block;
   }
 
+  /* Off-canvas sidebar for mobile */
   #category-sidebar {
     position: fixed;
     top: 0;
-    left: -100%;
+    left: 0;
     height: 100vh;
     width: 280px;
-    z-index: 999;
-    transition: transform 0.3s ease-in-out;
-    overflow-y: auto;
+    z-index: 1100;
+    transform: translateX(-100%); /* hidden by default */
+    transition: transform 0.28s cubic-bezier(.2,.8,.2,1);
     background-color: var(--sidebar-bg);
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 3rem 1rem 1rem 1rem; /* Added top padding for the close button */
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
   }
 
+  /* Inner scrollable area so the close button stays visible */
+  #category-sidebar .sidebar-inner {
+    height: 100vh;
+    overflow-y: auto;
+    padding: 3.5rem 1rem 2rem 1rem; /* room for close button and content */
+    box-sizing: border-box;
+  }
+
+  /* Show close button only on mobile */
+  .close-menu { display: block; }
+
   body.menu-open {
-    overflow: hidden;
+    overflow: hidden; /* prevent background scroll when menu open */
   }
 
   body.menu-open #category-sidebar {
-    transform: translateX(100%);
+    transform: translateX(0); /* slide in */
   }
 
   body.menu-open .menu-overlay {
@@ -142,6 +153,7 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
 }
 
 #category-sidebar {
+  position: relative;
   flex: 0 0 200px; /* Fixed width sidebar */
   background-color: var(--sidebar-bg);
   padding: 1rem;
@@ -164,6 +176,7 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
 
 /* Close button styles */
 .close-menu {
+  display: none; /* visible only on mobile via media query */
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -559,16 +572,7 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
     gap: 0.5rem;
     padding: 0.5rem;
   }
-  #category-sidebar {
-    flex: none;
-    width: 100%;
-    max-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid var(--sidebar-border);
-    border-radius: 6px 6px 0 0;
-    padding: 0.75rem 0.5rem;
-    margin-bottom: 0.5rem;
-  }
+  /* Sidebar layout on very small screens is handled by the off-canvas rules above; avoid overriding position here */
   #product-list-container {
     padding: 0;
   }
