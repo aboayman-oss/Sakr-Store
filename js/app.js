@@ -399,8 +399,41 @@ function router() {
   }
 }
 
+// --- Theme Management ---
+
+/**
+ * Applies the saved theme from localStorage or the user's system preference.
+ */
+function applyInitialTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  if (toggleBtn) {
+    toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+/**
+ * Sets up the event listener for the theme toggle button.
+ */
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  });
+}
+
 // --- App Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
+  applyInitialTheme(); // Apply theme as soon as the DOM is ready
+  initThemeToggle(); // Set up the toggle button
   updateCartCounter(); // Update counter on every page load
 
   // Run the logic for the current page

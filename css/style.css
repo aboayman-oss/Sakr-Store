@@ -1,15 +1,49 @@
+/* --- Theme Variables --- */
+:root {
+  --bg-color: #fff;
+  --text-color: #222;
+  --header-bg: #222;
+  --header-text: #fff;
+  --card-bg: #fff;
+  --card-border: #ddd;
+  --sidebar-bg: #f8f8f8;
+  --sidebar-border: #eee;
+  --button-bg: #f0f0f0;
+  --button-border: #ccc;
+  --primary-color: #007bff;
+  --primary-text: #fff;
+  --secondary-text: #555;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #eee;
+  --header-bg: #1f1f1f;
+  --card-bg: #1e1e1e;
+  --card-border: #444;
+  --sidebar-bg: #2a2a2a;
+  --sidebar-border: #383838;
+  --button-bg: #333;
+  --button-border: #555;
+  --secondary-text: #aaa;
+}
+
 /* Basic placeholder styles for Sakr Store */
 body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 header {
-  background: #222;
-  color: #fff;
+  background: var(--header-bg);
+  color: var(--header-text);
   padding: 1rem;
 }
-nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
+nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
 
 /* Product list styles */
 /* Main content wrapper for sidebar and product list */
@@ -21,9 +55,9 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
 #category-sidebar {
   flex: 0 0 200px; /* Fixed width sidebar */
-  background-color: #f8f8f8;
+  background-color: var(--sidebar-bg);
   padding: 1rem;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--sidebar-border);
   border-radius: 6px;
 }
 
@@ -31,7 +65,7 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.2rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 #category-list {
@@ -46,10 +80,10 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
 #product-list-container { flex-grow: 1; padding: 0; } /* Product list takes remaining space, remove its own padding */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-.product-card { border: 1px solid #ddd; padding: 0.75rem; border-radius: 6px; background: #fff; }
+.product-card { border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 6px; background: var(--card-bg); }
 .product-image { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; }
 .product-price { font-weight: bold; margin-top: 0.5rem; }
-.add-to-cart { margin-top: 0.5rem; padding: 0.5rem 0.75rem; cursor: pointer; }
+.add-to-cart { margin-top: 0.5rem; padding: 0.5rem 0.75rem; cursor: pointer; background-color: var(--primary-color); color: var(--primary-text); border: none; border-radius: 4px; }
 
 /* Cart page styles */
 #cart-items-container { padding: 1rem; }
@@ -63,7 +97,7 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--card-border);
 }
 .cart-item span {
   flex: 1;
@@ -79,8 +113,8 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   padding: 0.25rem 0.5rem;
   cursor: pointer;
   margin: 0 0.25rem;
-  border: 1px solid #ccc;
-  background: #f0f0f0;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
 }
 .remove-item {
   background: #ffdddd;
@@ -93,7 +127,7 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 }
 #customer-form {
   padding: 1rem;
-  border-top: 2px solid #333;
+  border-top: 2px solid var(--sidebar-border);
   margin-top: 1rem;
 }
 #customer-form label {
@@ -104,6 +138,8 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   width: 100%;
   padding: 0.5rem;
   box-sizing: border-box;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Category styles */
@@ -112,7 +148,7 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 }
 
 .category-title {
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--sidebar-border);
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -126,10 +162,20 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   width: 100%;
   cursor: pointer;
   font-size: 1rem;
-  color: #555;
+  color: var(--secondary-text);
   transition: color 0.2s ease, font-weight 0.2s ease;
 }
 #category-list button:hover, #category-list button.active {
-  color: #007bff;
+  color: var(--primary-color);
   font-weight: bold;
+}
+
+/* Theme Toggle Button */
+#theme-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--header-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
 }
