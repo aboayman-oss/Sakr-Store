@@ -24,6 +24,23 @@
           <ul id="category-list">
             <!-- Categories will be populated here by JS -->
           </ul>
+          <!-- Filter Pane -->
+          <div class="filter-pane">
+            <h3 class="filter-title">Sort by</h3>
+            <div class="sort-options" id="sort-options">
+                <button data-sort="default" class="active">Default</button>
+                <button data-sort="price-asc">Price: Low to High</button>
+                <button data-sort="price-desc">Price: High to Low</button>
+            </div>
+        
+            <h3 class="filter-title">Price Range</h3>
+            <div class="price-slider-container" id="price-filter-container">
+                <input type="range" id="price-slider" min="0" max="100" value="100" step="1">
+                <div class="price-range-display">
+                    <span>Up to: $</span><span id="price-range-value">100</span>
+                </div>
+            </div>
+          </div>
         </aside>
         <div id="product-list-container"></div>
       </div>

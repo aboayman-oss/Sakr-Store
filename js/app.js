@@ -9,6 +9,9 @@ const config = {
 let products = []; // Cache for product data
 
 let currentCategoryFilter = 'All'; // New: Default to showing all products
+let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
+let currentPriceMax = null; // Max price from the slider
+
 // --- Cart Management ---
 
 /**
@@ -124,16 +127,32 @@ async function fetchProducts() {
  * Renders product cards into a container, optionally filtered by category.
  * @param {HTMLElement} container - The element to render into.
  * @param {string} [categoryFilter='All'] - The category to filter by.
+ * @param {string} [sortOrder='default'] - The sort order.
+ * @param {number|null} [priceMax=null] - The maximum price.
  */
-function renderProducts(container, categoryFilter = 'All') {
+function renderProducts(container, categoryFilter = 'All', sortOrder = 'default', priceMax = null) {
   if (!container) return;
   container.innerHTML = '';
   const grid = document.createElement('div');
   grid.className = 'product-grid';
 
-  const filteredProducts = products.filter(p =>
+  // 1. Filter by category
+  let filteredProducts = products.filter(p =>
     categoryFilter === 'All' || (p.category && p.category.toLowerCase() === categoryFilter.toLowerCase())
   );
+
+  // 2. Filter by price (if a max price is set)
+  if (priceMax !== null) {
+    filteredProducts = filteredProducts.filter(p => (Number(p.price) || 0) <= priceMax);
+  }
+
+  // 3. Sort the products
+  if (sortOrder === 'price-asc') {
+    filteredProducts.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+  } else if (sortOrder === 'price-desc') {
+    filteredProducts.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+  }
+  // 'default' order doesn't require sorting
 
   if (filteredProducts.length === 0) {
     container.innerHTML = `<p>No products found in the "${categoryFilter}" category.</p>`;
@@ -239,11 +258,14 @@ function updateCartCounter() {
 async function initMainPage() {
       const productListContainer = document.getElementById('product-list-container');
       const categoryListEl = document.getElementById('category-list');
+      const sortOptionsEl = document.getElementById('sort-options');
+      const priceSliderEl = document.getElementById('price-slider');
+      const priceValueEl = document.getElementById('price-range-value');
     
       if (!productListContainer || !categoryListEl) return;
     
       // Initial loading state for products
-      productListContainer.innerHTML = '<p>Loading products...</p>';
+      productListContainer.innerHTML = '<p>Loading products...</p>';    
     
       await fetchProducts(); // Populate the global 'products' array
     
@@ -268,24 +290,78 @@ async function initMainPage() {
         categoryListEl.appendChild(li);
       });
     
-      // Initial render of products based on current filter (default 'All')
-      renderProducts(productListContainer, currentCategoryFilter);
+      // Function to update the price slider's range and value
+      const updatePriceSlider = () => {
+        // Guard clause: If slider elements don't exist, do nothing.
+        if (!priceSliderEl || !priceValueEl) return;
+
+        const relevantProducts = products.filter(p =>
+          currentCategoryFilter === 'All' || (p.category && p.category.toLowerCase() === currentCategoryFilter.toLowerCase())
+        );
+        
+        if (relevantProducts.length === 0) {
+          priceSliderEl.min = 0;
+          priceSliderEl.max = 0;
+          priceSliderEl.value = 0;
+          priceValueEl.textContent = '0';
+          currentPriceMax = 0;
+          currentPriceMax = null; // Reset price filter
+        } else {
+          const maxPrice = Math.ceil(Math.max(0, ...relevantProducts.map(p => Number(p.price) || 0)));
+          priceSliderEl.max = maxPrice;
+          priceSliderEl.value = maxPrice; // Set slider to max initially
+          priceValueEl.textContent = maxPrice;
+          currentPriceMax = maxPrice; // Update state
+        }
+      };
+
+      // Initial setup
+      updatePriceSlider();
+      renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
     
       // Event listener for category clicks
       categoryListEl.addEventListener('click', (e) => {
         const target = e.target;
         if (target.matches('button[data-category]')) {
           const selectedCategory = target.getAttribute('data-category');
-          currentCategoryFilter = selectedCategory; // Update filter state
+          currentCategoryFilter = selectedCategory;
     
-          // Remove active class from all buttons
           categoryListEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-          // Add active class to the clicked button
           target.classList.add('active');
     
-          renderProducts(productListContainer, currentCategoryFilter);
+          // Update slider and re-render products
+          updatePriceSlider();
+          renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
         }
       });
+
+      // Event listener for sort buttons
+      if (sortOptionsEl) {
+        sortOptionsEl.addEventListener('click', (e) => {
+          const target = e.target;
+          if (target.matches('button[data-sort]')) {
+            currentSortOrder = target.getAttribute('data-sort');
+  
+            sortOptionsEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            target.classList.add('active');
+  
+            renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+          }
+        });
+      }
+
+      // Event listener for price slider
+      if (priceSliderEl && priceValueEl) {
+        priceSliderEl.addEventListener('input', (e) => {
+          const value = Number(e.target.value);
+          currentPriceMax = value;
+          priceValueEl.textContent = value;
+          // No need to call render immediately, use 'change' for that to avoid too many re-renders
+        });
+        priceSliderEl.addEventListener('change', () => {
+          renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+        });
+      }
     
       // Event listener for add to cart buttons
       productListContainer.addEventListener('click', (e) => {
