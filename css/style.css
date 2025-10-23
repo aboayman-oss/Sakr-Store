@@ -38,14 +38,100 @@ body {
   color: var(--text-color);
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
+
 header {
   background: var(--header-bg);
   color: var(--header-text);
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
+
 nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
 
+/* Hamburger Menu */
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+  z-index: 1000;
+}
+
+.hamburger-menu span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--header-text);
+  margin: 5px 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Menu Overlay */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
 /* Product list styles */
+/* Main content wrapper for sidebar and product list */
+.main-content-wrapper {
+  position: relative;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+  }
+
+  #category-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    height: 100vh;
+    width: 280px;
+    z-index: 999;
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  body.menu-open #category-sidebar {
+    transform: translateX(280px);
+  }
+
+  body.menu-open .menu-overlay {
+    display: block;
+  }
+
+  body.menu-open .hamburger-menu span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  body.menu-open .hamburger-menu span:nth-child(2) {
+    opacity: 0;
+  }
+
+  body.menu-open .hamburger-menu span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
 /* Main content wrapper for sidebar and product list */
 .main-content-wrapper {
   display: flex;

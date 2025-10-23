@@ -5,6 +5,26 @@ const config = {
   whatsappNumber: '201024496178',
 };
 
+// --- Mobile Menu Management ---
+function initMobileMenu() {
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuOverlay = document.getElementById('menu-overlay');
+  
+  function toggleMenu() {
+    document.body.classList.toggle('menu-open');
+  }
+  
+  menuToggle.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', toggleMenu);
+  
+  // Close menu when a category is selected (on mobile)
+  document.getElementById('category-list').addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      document.body.classList.remove('menu-open');
+    }
+  });
+}
+
 // --- State ---
 let products = []; // Cache for product data
 
@@ -583,6 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyInitialTheme(); // Apply theme as soon as the DOM is ready
   initThemeToggle(); // Set up the toggle button
   updateCartCounter(); // Update counter on every page load
+  initMobileMenu(); // Initialize mobile menu functionality
 
   // Run the logic for the current page
   router();
