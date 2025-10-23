@@ -9,18 +9,24 @@ const config = {
 function initMobileMenu() {
   const menuToggle = document.getElementById('menu-toggle');
   const menuOverlay = document.getElementById('menu-overlay');
+  const closeButton = document.querySelector('.close-menu');
+  
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+  }
   
   function toggleMenu() {
     document.body.classList.toggle('menu-open');
   }
   
   menuToggle.addEventListener('click', toggleMenu);
-  menuOverlay.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+  closeButton.addEventListener('click', closeMenu);
   
   // Close menu when a category is selected (on mobile)
   document.getElementById('category-list').addEventListener('click', (e) => {
     if (window.innerWidth <= 768) {
-      document.body.classList.remove('menu-open');
+      closeMenu();
     }
   });
 }
