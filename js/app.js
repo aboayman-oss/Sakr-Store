@@ -8,6 +8,7 @@ const config = {
 // --- State ---
 let products = []; // Cache for product data
 
+let currentCategoryFilter = 'All'; // New: Default to showing all products
 // --- Cart Management ---
 
 /**
@@ -120,17 +121,26 @@ async function fetchProducts() {
 }
 
 /**
- * Renders product cards into a container.
- * @param {Array<object>} productList - The list of products to render.
+ * Renders product cards into a container, optionally filtered by category.
  * @param {HTMLElement} container - The element to render into.
+ * @param {string} [categoryFilter='All'] - The category to filter by.
  */
-function renderProducts(productList, container) {
+function renderProducts(container, categoryFilter = 'All') {
   if (!container) return;
   container.innerHTML = '';
   const grid = document.createElement('div');
   grid.className = 'product-grid';
 
-  productList.forEach(p => {
+  const filteredProducts = products.filter(p =>
+    categoryFilter === 'All' || (p.category && p.category.toLowerCase() === categoryFilter.toLowerCase())
+  );
+
+  if (filteredProducts.length === 0) {
+    container.innerHTML = `<p>No products found in the "${categoryFilter}" category.</p>`;
+    return;
+  }
+
+  filteredProducts.forEach(p => {
     const card = document.createElement('article');
     card.className = 'product-card';
     card.innerHTML = `
@@ -227,52 +237,64 @@ function updateCartCounter() {
  * Initializes the main product listing page.
  */
 async function initMainPage() {
-  const container = document.getElementById('product-list-container');
-  if (!container) return;
-
-  // Initial loading state
-  container.innerHTML = '<p>Loading products...</p>';
-
-  const productList = await fetchProducts();
-
-  // Group products by category
-  const productsByCategory = productList.reduce((acc, product) => {
-    const category = product.category || 'Uncategorized';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(product);
-    return acc;
-  }, {});
-
-  // Clear the main container once
-  container.innerHTML = '';
-
-  // Render products for each category
-  for (const category in productsByCategory) {
-    const categorySection = document.createElement('section');
-    categorySection.className = 'category-section';
-
-    const categoryTitle = document.createElement('h2');
-    categoryTitle.className = 'category-title';
-    categoryTitle.textContent = category;
-    categorySection.appendChild(categoryTitle);
-
-    const productGridContainer = document.createElement('div');
-    // This container will be populated by renderProducts
-    renderProducts(productsByCategory[category], productGridContainer);
-    categorySection.appendChild(productGridContainer);
-
-    container.appendChild(categorySection);
-  }
-
-  container.addEventListener('click', (e) => {
-    const btn = e.target.closest('.add-to-cart');
-    if (btn) {
-      const productId = btn.getAttribute('data-product-id');
-      addToCart(productId);
-    }
-  });
+      const productListContainer = document.getElementById('product-list-container');
+      const categoryListEl = document.getElementById('category-list');
+    
+      if (!productListContainer || !categoryListEl) return;
+    
+      // Initial loading state for products
+      productListContainer.innerHTML = '<p>Loading products...</p>';
+    
+      await fetchProducts(); // Populate the global 'products' array
+    
+      // Populate categories sidebar
+      const categories = new Set(['All']); // Start with 'All' category
+      products.forEach(p => {
+        if (p.category) {
+          categories.add(p.category);
+        }
+      });
+    
+      categoryListEl.innerHTML = ''; // Clear existing categories
+      categories.forEach(category => {
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        button.textContent = category;
+        button.setAttribute('data-category', category);
+        if (category === currentCategoryFilter) {
+          button.classList.add('active');
+        }
+        li.appendChild(button);
+        categoryListEl.appendChild(li);
+      });
+    
+      // Initial render of products based on current filter (default 'All')
+      renderProducts(productListContainer, currentCategoryFilter);
+    
+      // Event listener for category clicks
+      categoryListEl.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.matches('button[data-category]')) {
+          const selectedCategory = target.getAttribute('data-category');
+          currentCategoryFilter = selectedCategory; // Update filter state
+    
+          // Remove active class from all buttons
+          categoryListEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+          // Add active class to the clicked button
+          target.classList.add('active');
+    
+          renderProducts(productListContainer, currentCategoryFilter);
+        }
+      });
+    
+      // Event listener for add to cart buttons
+      productListContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.add-to-cart');
+        if (btn) {
+          const productId = btn.getAttribute('data-product-id');
+          addToCart(productId);
+        }
+      });
 }
 
 /**
@@ -363,10 +385,24 @@ async function initCheckoutForm() {
   });
 }
 
+/**
+ * Simple router to initialize the correct page logic.
+ */
+function router() {
+  const path = window.location.pathname;
+
+  if (path.endsWith('/') || path.endsWith('/index.html')) {
+    initMainPage();
+  } else if (path.endsWith('/cart.html')) {
+    initCartPage();
+    initCheckoutForm(); // Assuming checkout is on the cart page
+  }
+}
+
 // --- App Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
   updateCartCounter(); // Update counter on every page load
-  initMainPage();
-  initCartPage();
-  initCheckoutForm();
+
+  // Run the logic for the current page
+  router();
 });

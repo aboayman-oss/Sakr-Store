@@ -21,7 +21,7 @@ A simple e-commerce website for selling mugs, tote bags, and t-shirts.
 ## Installation
 
 1. Clone the repository: `git clone https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories`
-2. Navigate into the directory: `cd Sakr-Store`
+2. Navigate into the directory: `cd your-repository-name`
 3. Open `index.html` in your web browser.
 
 ## Usage

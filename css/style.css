@@ -12,7 +12,39 @@ header {
 nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
 /* Product list styles */
-#product-list-container { padding: 1rem; }
+/* Main content wrapper for sidebar and product list */
+.main-content-wrapper {
+  display: flex;
+  gap: 1.5rem; /* Space between sidebar and product list */
+  padding: 1rem; /* Overall padding for the main content area */
+}
+
+#category-sidebar {
+  flex: 0 0 200px; /* Fixed width sidebar */
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-right: 1px solid #eee;
+  border-radius: 6px;
+}
+
+#category-sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+#category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#category-list li {
+  margin-bottom: 0.5rem;
+}
+
+#product-list-container { flex-grow: 1; padding: 0; } /* Product list takes remaining space, remove its own padding */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
 .product-card { border: 1px solid #ddd; padding: 0.75rem; border-radius: 6px; background: #fff; }
 .product-image { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; }
@@ -21,6 +53,11 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
 /* Cart page styles */
 #cart-items-container { padding: 1rem; }
+/* Style for the loading state */
+#cart-items-container.loading {
+  opacity: 0.5;
+  pointer-events: none; /* Prevent clicks while loading */
+}
 .cart-item {
   display: flex;
   justify-content: space-between;
@@ -78,4 +115,21 @@ nav a { color: #fff; margin-right: 1rem; text-decoration: none; }
   border-bottom: 2px solid #eee;
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
+}
+
+/* Category filter buttons */
+#category-list button {
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #555;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+#category-list button:hover, #category-list button.active {
+  color: #007bff;
+  font-weight: bold;
 }
