@@ -148,6 +148,184 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
   transition-duration: .5s;
 }
 
+/* Notification Card Styles */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.notification-card {
+  width: 360px;
+  height: 150px;
+  background: var(--card-bg);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0 10px;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  animation: slideIn 0.5s ease-in-out;
+  border: 1px solid var(--card-border);
+}
+
+[data-theme="light"] .notification-card {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+              0 4px 12px rgba(59, 130, 246, 0.08),
+              0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .notification-card {
+  background: rgba(45, 45, 45, 0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+              0 4px 12px rgba(59, 130, 246, 0.15),
+              0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.notification-card.slideOut {
+  animation: slideOut 0.5s ease-in-out;
+}
+
+.notification-wrapper {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-icon {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-icon .icon-cart-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-icon .icon-cart-box svg {
+  width: 24px;
+  height: 24px;
+}
+
+.notification-content {
+  width: 80%;
+}
+
+.notification-title-wrapper {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  width: 100%;
+}
+
+.notification-title {
+  width: 95%;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #3B82F6;
+  padding: 20px 0 0 10px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.notification-close {
+  width: 5%;
+  text-align: right;
+  padding: 0 30px;
+  cursor: pointer;
+}
+
+[data-theme="light"] .notification-close svg {
+  fill: rgba(0, 0, 0, 0.3);
+  transition: 0.3s ease-in-out;
+}
+
+[data-theme="light"] .notification-close svg:hover {
+  fill: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .notification-close svg {
+  fill: rgba(255, 255, 255, 0.3);
+  transition: 0.3s ease-in-out;
+}
+
+[data-theme="dark"] .notification-close svg:hover {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.notification-product {
+  font-size: 0.9em;
+  color: var(--text-color);
+  padding: 10px 0 0 10px;
+  font-weight: 500;
+}
+
+.notification-price {
+  font-size: 1em;
+  font-weight: 700;
+  color: #3B82F6;
+  padding: 0 0 10px 10px;
+}
+
+.notification-button {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 12px rgba(59, 130, 246, 0.2);
+  padding-block: 0.25rem;
+  padding-inline: 1rem;
+  background-color: #3B82F6;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  gap: 10px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  overflow: hidden;
+  font-size: 15px;
+  cursor: pointer;
+  height: 32px;
+  margin-left: 10px;
+}
+
+.notification-button:hover {
+  transform: scale(1.05);
+  background-color: #2563EB;
+  box-shadow: 0px 8px 15px rgba(59, 130, 246, 0.3);
+}
+
+.notification-button svg {
+  transition: all 0.3s ease-in-out;
+}
+
+.notification-button:hover svg {
+  transform: translate(4px);
+}
+
 /* Cart page styles */
 #cart-items-container { padding: 1rem; }
 /* Style for the loading state */
