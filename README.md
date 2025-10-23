@@ -1,6 +1,7 @@
 # Sakr Store
 
 A simple e-commerce website for selling mugs, tote bags, and t-shirts.
+https://aboayman-oss.github.io/Sakr-Store/
 
 ## Key Features
 
