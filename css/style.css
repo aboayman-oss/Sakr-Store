@@ -421,6 +421,26 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
   padding: 0 0.5rem;
 }
 
+/* Search Bar Styles */
+.search-container {
+  padding: 0 1rem 1rem 1rem; /* Add some padding around the search bar */
+}
+
+#search-bar {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  box-sizing: border-box; /* Important for 100% width + padding */
+}
+
+#search-bar::placeholder {
+  color: var(--secondary-text);
+}
+
 /* --- Responsive Styles for Mobile Devices --- */
 @media (max-width: 600px) {
   body {
@@ -466,6 +486,12 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
     min-width: 0;
     height: 38px;
     font-size: 1em;
+  }
+  .search-container {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
+  #search-bar {
+    padding: 0.5rem;
   }
   .notification-card {
     width: 95vw;

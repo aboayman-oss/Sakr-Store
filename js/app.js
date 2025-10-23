@@ -8,6 +8,7 @@ const config = {
 // --- State ---
 let products = []; // Cache for product data
 
+let currentSearchTerm = ''; // New: For live search
 let currentCategoryFilter = 'All'; // New: Default to showing all products
 let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
 let currentPriceMax = null; // Max price from the slider
@@ -126,27 +127,38 @@ async function fetchProducts() {
 /**
  * Renders product cards into a container, optionally filtered by category.
  * @param {HTMLElement} container - The element to render into.
+ * @param {string} [searchTerm=''] - The search term to filter by.
  * @param {string} [categoryFilter='All'] - The category to filter by.
  * @param {string} [sortOrder='default'] - The sort order.
  * @param {number|null} [priceMax=null] - The maximum price.
  */
-function renderProducts(container, categoryFilter = 'All', sortOrder = 'default', priceMax = null) {
+function renderProducts(container, searchTerm = '', categoryFilter = 'All', sortOrder = 'default', priceMax = null) {
   if (!container) return;
   container.innerHTML = '';
   const grid = document.createElement('div');
   grid.className = 'product-grid';
 
-  // 1. Filter by category
-  let filteredProducts = products.filter(p =>
+  // 1. Filter by search term (name and description)
+  const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
+  let filteredProducts = products;
+  if (lowerCaseSearchTerm) {
+    filteredProducts = products.filter(p =>
+      (p.name && p.name.toLowerCase().includes(lowerCaseSearchTerm)) ||
+      (p.description && p.description.toLowerCase().includes(lowerCaseSearchTerm))
+    );
+  }
+
+  // 2. Filter by category
+  filteredProducts = filteredProducts.filter(p =>
     categoryFilter === 'All' || (p.category && p.category.toLowerCase() === categoryFilter.toLowerCase())
   );
 
-  // 2. Filter by price (if a max price is set)
+  // 3. Filter by price (if a max price is set)
   if (priceMax !== null) {
     filteredProducts = filteredProducts.filter(p => (Number(p.price) || 0) <= priceMax);
   }
 
-  // 3. Sort the products
+  // 4. Sort the products
   if (sortOrder === 'price-asc') {
     filteredProducts.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
   } else if (sortOrder === 'price-desc') {
@@ -155,7 +167,7 @@ function renderProducts(container, categoryFilter = 'All', sortOrder = 'default'
   // 'default' order doesn't require sorting
 
   if (filteredProducts.length === 0) {
-    container.innerHTML = `<p>No products found in the "${categoryFilter}" category.</p>`;
+    container.innerHTML = `<p>No products found matching your criteria.</p>`;
     return;
   }
 
@@ -306,6 +318,7 @@ function updateCartCounter() {
  * Initializes the main product listing page.
  */
 async function initMainPage() {
+      const searchBarEl = document.getElementById('search-bar');
       const productListContainer = document.getElementById('product-list-container');
       const categoryListEl = document.getElementById('category-list');
       const sortOptionsEl = document.getElementById('sort-options');
@@ -367,7 +380,7 @@ async function initMainPage() {
 
       // Initial setup
       updatePriceSlider();
-      renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+      renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
     
       // Event listener for category clicks
       categoryListEl.addEventListener('click', (e) => {
@@ -381,7 +394,7 @@ async function initMainPage() {
     
           // Update slider and re-render products
           updatePriceSlider();
-          renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
         }
       });
 
@@ -395,7 +408,7 @@ async function initMainPage() {
             sortOptionsEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
             target.classList.add('active');
   
-            renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+            renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
           }
         });
       }
@@ -409,7 +422,16 @@ async function initMainPage() {
           // No need to call render immediately, use 'change' for that to avoid too many re-renders
         });
         priceSliderEl.addEventListener('change', () => {
-          renderProducts(productListContainer, currentCategoryFilter, currentSortOrder, currentPriceMax);
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
+        });
+      }
+
+      // Event listener for the search bar
+      if (searchBarEl) {
+        searchBarEl.addEventListener('input', (e) => {
+          currentSearchTerm = e.target.value;
+          // Re-render products on every keystroke for a "live" search feel
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
         });
       }
     
