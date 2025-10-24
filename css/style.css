@@ -38,6 +38,14 @@ body {
   color: var(--text-color);
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
+/* Responsive sort filter controls */
+.sort-options { display: flex; gap: 0.5em; }
+.mobile-sort-select { display: none; }
+
+@media (max-width: 600px) {
+  .sort-options { display: none; }
+  .mobile-sort-select { display: block; width: 100%; margin-top: 0.5em; }
+}
 
 header {
   background: var(--header-bg);
