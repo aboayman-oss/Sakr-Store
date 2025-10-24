@@ -72,6 +72,19 @@ let currentCategoryFilter = 'All'; // New: Default to showing all products
 let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
 let currentPriceMax = null; // Max price from the slider
 
+/**
+ * Simple debounce helper
+ * @param {Function} fn
+ * @param {number} wait
+ */
+const debounce = (fn, wait = 250) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), wait);
+  };
+};
+
 // --- Cart Management ---
 
 /**
@@ -457,18 +470,42 @@ async function initMainPage() {
         }
       });
 
-      // Event listener for sort buttons
+      // Event listener for sort buttons (desktop)
       if (sortOptionsEl) {
         sortOptionsEl.addEventListener('click', (e) => {
           const target = e.target;
           if (target.matches('button[data-sort]')) {
             currentSortOrder = target.getAttribute('data-sort');
-  
+
             sortOptionsEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
             target.classList.add('active');
-  
+
+            // Keep mobile select in sync (if present)
+            const mobileSortEl = document.getElementById('mobile-sort');
+            if (mobileSortEl) mobileSortEl.value = currentSortOrder;
+
             renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
           }
+        });
+      }
+
+      // Mobile compact sort control (select) — visible only on small screens via CSS
+      const mobileSortEl = document.getElementById('mobile-sort');
+      if (mobileSortEl) {
+        // Initialize from current state
+        mobileSortEl.value = currentSortOrder || 'default';
+        mobileSortEl.addEventListener('change', (e) => {
+          const val = e.target.value;
+          currentSortOrder = val;
+
+          // Update desktop buttons active state if present
+          if (sortOptionsEl) {
+            sortOptionsEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            const btn = sortOptionsEl.querySelector(`button[data-sort="${val}"]`);
+            if (btn) btn.classList.add('active');
+          }
+
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
         });
       }
 
@@ -485,13 +522,14 @@ async function initMainPage() {
         });
       }
 
-      // Event listener for the search bar
+      // Event listener for the search bar (debounced)
       if (searchBarEl) {
-        searchBarEl.addEventListener('input', (e) => {
+        const handleSearchInput = (e) => {
           currentSearchTerm = e.target.value;
-          // Re-render products on every keystroke for a "live" search feel
           renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
-        });
+        };
+        const debouncedSearch = debounce(handleSearchInput, 250); // 250ms debounce
+        searchBarEl.addEventListener('input', debouncedSearch);
       }
     
       // Event listener for add to cart buttons

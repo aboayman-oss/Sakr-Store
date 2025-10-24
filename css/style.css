@@ -601,12 +601,26 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
 #price-slider { width: 160px; }
 .price-range-display { font-size: 0.95rem; color: var(--secondary-text); display:flex; gap:0.25rem; align-items:center; }
 
+/* Ensure the price label and value never wrap onto multiple lines */
+.price-range-display {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+.price-range-display span {
+  white-space: nowrap;
+}
+
 /* Make filters stack neatly on small screens */
 @media (max-width: 600px) {
   .filter-pane { padding: 0 0.5rem 0.5rem 0.5rem; }
   .filter-pane .filter-inner { flex-direction: column; align-items: stretch; gap: 0.5rem; }
   .price-block { margin-left: 0; justify-content: flex-start; }
   #price-slider { width: 100%; }
+
+  /* On small screens hide the full button row and show a compact select control */
+  .sort-options { display: none; }
+  .mobile-sort-select { display: inline-block; margin-left: 0.25rem; padding: 0.45rem 0.5rem; border-radius: 6px; border: 1px solid var(--button-border); background: var(--button-bg); color: var(--text-color); }
+  .mobile-sort-select:focus { outline: 2px solid var(--primary-color); }
 }
 
 /* --- Responsive Styles for Mobile Devices --- */
