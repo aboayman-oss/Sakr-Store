@@ -39,12 +39,31 @@ body {
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 /* Responsive sort filter controls */
-.sort-options { display: flex; gap: 0.5em; }
-.mobile-sort-select { display: none; }
+.sort-options {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.mobile-sort-select {
+    display: none;
+    padding: 8px;
+    border: 1px solid var(--button-border);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    width: 100%;
+    margin: 0.5em 0;
+    font-size: 1rem;
+}
 
 @media (max-width: 600px) {
-  .sort-options { display: none; }
-  .mobile-sort-select { display: block; width: 100%; margin-top: 0.5em; }
+    .sort-options {
+        display: none !important;
+    }
+    .mobile-sort-select {
+        display: block;
+    }
 }
 
 /* Custom radio button styles (from asset.css, themed) */
