@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Store</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="external assets/asset.css">
   </head>
   <body>
     <header>
@@ -34,9 +35,23 @@
           <div class="sort-block">
             <h3 class="filter-title">Sort by</h3>
             <div class="sort-options" id="sort-options">
-                <button data-sort="default" class="active">Default</button>
-                <button data-sort="price-asc">Price: Low to High</button>
-                <button data-sort="price-desc">Price: High to Low</button>
+                  <!-- Custom radio buttons from asset.html -->
+                  <div class="mydict">
+                    <div>
+                      <label>
+                        <input type="radio" name="sort-radio" value="default" checked>
+                        <span>Default</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="sort-radio" value="price-asc">
+                        <span>Price: Low to High</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="sort-radio" value="price-desc">
+                        <span>Price: High to Low</span>
+                      </label>
+                    </div>
+                  </div>
             </div>
             <!-- Mobile-friendly compact control (visible on small screens only) -->
             <select id="mobile-sort" aria-label="Sort products" class="mobile-sort-select">

@@ -23,24 +23,24 @@
 }
 
 .mydict input[type="radio"]:checked + span {
-  box-shadow: 0 0 0 0.0625em #0043ed;
-  background-color: #dee7ff;
+  box-shadow: 0 0 0 0.0625em var(--primary-color);
+  background-color: var(--button-bg);
   z-index: 1;
-  color: #0043ed;
+  color: var(--primary-color);
 }
 
 label span {
   display: block;
   cursor: pointer;
-  background-color: #fff;
+  background-color: var(--card-bg);
   padding: 0.375em .75em;
   position: relative;
   margin-left: .0625em;
-  box-shadow: 0 0 0 0.0625em #b5bfd9;
+  box-shadow: 0 0 0 0.0625em var(--card-border);
   letter-spacing: .05em;
-  color: #3e4963;
+  color: var(--text-color);
   text-align: center;
-  transition: background-color .5s ease;
+  transition: background-color .5s ease, color .5s ease;
 }
 
 label:first-child span {

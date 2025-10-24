@@ -684,4 +684,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Run the logic for the current page
   router();
+
+  // --- Sort filter logic ---
+  const sortRadios = document.querySelectorAll('.mydict input[type="radio"]');
+  const sortDropdown = document.getElementById('mobile-sort');
+  const productListContainer = document.getElementById('product-list-container');
+
+  function updateSort(order) {
+    currentSortOrder = order;
+    renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
+    // Update radio checked state
+    sortRadios.forEach(r => { r.checked = r.value === order; });
+    // Update dropdown value
+    if (sortDropdown) sortDropdown.value = order;
+  }
+
+  // Desktop radio buttons
+  sortRadios.forEach(radio => {
+    radio.addEventListener('change', e => {
+      if (radio.checked) updateSort(radio.value);
+    });
+  });
+
+  // Mobile dropdown
+  if (sortDropdown) {
+    sortDropdown.addEventListener('change', e => {
+      updateSort(sortDropdown.value);
+    });
+  }
+
+  // Initial sync
+  updateSort(currentSortOrder);
 });
