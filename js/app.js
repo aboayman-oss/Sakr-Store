@@ -247,7 +247,8 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     const card = document.createElement('article');
     card.className = 'product-card';
     card.innerHTML = `
-      <img src="${p.image || ''}" alt="${p.name || 'Product image'}" class="product-image">
+      <a href="product.html?id=${p.id}" class="product-link">
+        <img src="${p.image || ''}" alt="${p.name || 'Product image'}" class="product-image">
       <h3>${p.name || 'Untitled'}</h3>
       <p class="product-desc">${p.description || ''}</p>
       <div class="product-price">${(Number(p.price) || 0).toFixed(2)}</div>
