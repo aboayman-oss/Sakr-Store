@@ -152,13 +152,17 @@ nav a { color: var(--header-text); margin-right: 1rem; text-decoration: none; }
   padding: 1rem; /* Overall padding for the main content area */
 }
 
-#category-sidebar {
-  position: relative;
-  flex: 0 0 200px; /* Fixed width sidebar */
-  background-color: var(--sidebar-bg);
-  padding: 1rem;
-  border-right: 1px solid var(--sidebar-border);
-  border-radius: 6px;
+/* Desktop-only sidebar layout: scope these rules to larger viewports so mobile
+   media rules are not accidentally overridden by cascade. */
+@media (min-width: 769px) {
+  #category-sidebar {
+    position: relative;
+    flex: 0 0 200px; /* Fixed width sidebar on desktop */
+    background-color: var(--sidebar-bg);
+    padding: 1rem;
+    border-right: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+  }
 }
 
 #category-sidebar h2 {
