@@ -3,7 +3,9 @@
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Store</title>
+  <title>Sakr Store</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
   <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -13,11 +15,15 @@
         <span></span>
         <span></span>
       </button>
-      <h1>My Store</h1>
+      <h1>Sakr Store</h1>
       <nav>
-        <button id="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
-        <a href="cart.html" class="cart-link">
-          Cart <span class="cart-count">(0)</span>
+        <button id="theme-toggle-btn" aria-label="Toggle dark mode">
+          <i class="ri-sun-line" id="light-icon"></i>
+          <i class="ri-moon-line" id="dark-icon"></i>
+        </button>
+        <a href="cart.html" class="cart-link" aria-label="View shopping cart">
+          <i class="ri-shopping-cart-2-line"></i>
+          <span class="cart-count" aria-label="Items in cart">0</span>
         </a>
       </nav>
     </header>
