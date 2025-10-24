@@ -27,6 +27,31 @@
       <div class="search-container">
         <input type="search" id="search-bar" placeholder="Search for products...">
       </div>
+
+      <!-- Move filters here so they are always visible below the search bar -->
+      <div class="filter-pane" id="top-filter-pane">
+        <div class="filter-inner">
+          <div class="sort-block">
+            <h3 class="filter-title">Sort by</h3>
+            <div class="sort-options" id="sort-options">
+                <button data-sort="default" class="active">Default</button>
+                <button data-sort="price-asc">Price: Low to High</button>
+                <button data-sort="price-desc">Price: High to Low</button>
+            </div>
+          </div>
+
+          <div class="price-block">
+            <h3 class="filter-title">Price Range</h3>
+            <div class="price-slider-container" id="price-filter-container">
+                <input type="range" id="price-slider" min="0" max="100" value="100" step="1">
+                <div class="price-range-display">
+                    <span>Up to: $</span><span id="price-range-value">100</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="main-content-wrapper">
         <aside id="category-sidebar" aria-hidden="true">
           <div class="sidebar-inner">
@@ -35,23 +60,6 @@
             <ul id="category-list">
               <!-- Categories will be populated here by JS -->
             </ul>
-            <!-- Filter Pane -->
-            <div class="filter-pane">
-              <h3 class="filter-title">Sort by</h3>
-              <div class="sort-options" id="sort-options">
-                  <button data-sort="default" class="active">Default</button>
-                  <button data-sort="price-asc">Price: Low to High</button>
-                  <button data-sort="price-desc">Price: High to Low</button>
-              </div>
-          
-              <h3 class="filter-title">Price Range</h3>
-              <div class="price-slider-container" id="price-filter-container">
-                  <input type="range" id="price-slider" min="0" max="100" value="100" step="1">
-                  <div class="price-range-display">
-                      <span>Up to: $</span><span id="price-range-value">100</span>
-                  </div>
-              </div>
-            </div>
           </div>
         </aside>
         <div id="product-list-container"></div>
