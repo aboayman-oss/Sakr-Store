@@ -47,6 +47,48 @@ body {
   .mobile-sort-select { display: block; width: 100%; margin-top: 0.5em; }
 }
 
+/* Custom radio button styles (from asset.css, themed) */
+.mydict div {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+.mydict input[type="radio"] {
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.mydict input[type="radio"]:checked + span {
+  box-shadow: 0 0 0 0.0625em var(--primary-color);
+  background-color: var(--button-bg);
+  z-index: 1;
+  color: var(--primary-color);
+}
+label span {
+  display: block;
+  cursor: pointer;
+  background-color: var(--card-bg);
+  padding: 0.375em .75em;
+  position: relative;
+  margin-left: .0625em;
+  box-shadow: 0 0 0 0.0625em var(--card-border);
+  letter-spacing: .05em;
+  color: var(--text-color);
+  text-align: center;
+  transition: background-color .5s ease, color .5s ease;
+}
+label:first-child span {
+  border-radius: .375em 0 0 .375em;
+}
+label:last-child span {
+  border-radius: 0 .375em .375em 0;
+}
+
 header {
   background: var(--header-bg);
   color: var(--header-text);
