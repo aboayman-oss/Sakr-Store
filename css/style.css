@@ -831,15 +831,28 @@ nav a:hover {
   flex-direction: column;
 }
 
-/* Make the card link grow to push the button down */
+/* Make the card link grow to push the footer down */
 .product-card-link {
   display: block;
   text-decoration: none;
   color: inherit;
-  flex: 1; /* Takes up available space, pushing button to bottom */
+  flex: 1; /* Takes up available space, pushing footer to bottom */
+}
+
+/* Footer section containing price and button, anchored at bottom */
+.product-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto; /* Push to bottom if card is taller */
 }
 
 .product-price { font-weight: bold; margin-top: 0.5rem; }
+
+.product-price-block {
+  margin: 0; /* Remove default margins for tight spacing */
+  padding: 0.25rem 0; /* Small vertical padding */
+}
 
 .CartBtn {
   width: 100%; /* Full width on mobile and smaller cards */
@@ -858,14 +871,6 @@ nav a:hover {
   position: relative;
   margin-top: 0.5rem; /* Space between card content and button */
   padding: 0.5rem; /* Ensure adequate padding for text */
-}
-
-/* On larger screens where cards are wider, constrain button width */
-@media (min-width: 400px) {
-  .CartBtn {
-    width: 100%;
-    max-width: none; /* Stay full width */
-  }
 }
 
 .IconContainer {
