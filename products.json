@@ -12,9 +12,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Apparel",
-  "discount": true,
-  "discountedPrice": 19.99
+    "category": "Apparel",
+    "discount": true,
+    "discountedPrice": 19.99,
+    "stock": 25
   },
   {
     "id": 2,
@@ -29,9 +30,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Home Goods",
-  "discount": false,
-  "discountedPrice": 15.50
+    "category": "Home Goods",
+    "discount": false,
+    "discountedPrice": 15.50,
+    "stock": 5
   },
   {
     "id": 3,
@@ -46,9 +48,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Accessories",
-  "discount": true,
-  "discountedPrice": 14.99
+    "category": "Accessories",
+    "discount": true,
+    "discountedPrice": 14.99,
+    "stock": 0
   },
   {
     "id": 4,
@@ -63,9 +66,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Apparel",
-  "discount": false,
-  "discountedPrice": 10.00
+    "category": "Apparel",
+    "discount": false,
+    "discountedPrice": 10.00,
+    "stock": 15
   },
   {
     "id": 5,
@@ -80,9 +84,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Home Goods",
-  "discount": true,
-  "discountedPrice": 16.00
+    "category": "Home Goods",
+    "discount": true,
+    "discountedPrice": 16.00,
+    "stock": 8
   },
   {
     "id": 6,
@@ -97,9 +102,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Accessories",
-  "discount": false,
-  "discountedPrice": 30.00
+    "category": "Accessories",
+    "discount": false,
+    "discountedPrice": 30.00,
+    "stock": 3
   },
   {
     "id": 7,
@@ -114,9 +120,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Electronics",
-  "discount": true,
-  "discountedPrice": 34.99
+    "category": "Electronics",
+    "discount": true,
+    "discountedPrice": 34.99,
+    "stock": 50
   },
   {
     "id": 8,
@@ -131,9 +138,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Books",
-  "discount": false,
-  "discountedPrice": 50.00
+    "category": "Books",
+    "discount": false,
+    "discountedPrice": 50.00,
+    "stock": 12
   },
   {
     "id": 9,
@@ -148,9 +156,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Music",
-  "discount": true,
-  "discountedPrice": 49.99
+    "category": "Music",
+    "discount": true,
+    "discountedPrice": 49.99,
+    "stock": 7
   },
   {
     "id": 10,
@@ -165,9 +174,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Games",
-  "discount": false,
-  "discountedPrice": 70.00
+    "category": "Games",
+    "discount": false,
+    "discountedPrice": 70.00,
+    "stock": 0
   },
   {
     "id": 11,
@@ -182,9 +192,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Movies",
-  "discount": true,
-  "discountedPrice": 69.99
+    "category": "Movies",
+    "discount": true,
+    "discountedPrice": 69.99,
+    "stock": 30
   },
   {
     "id": 12,
@@ -199,9 +210,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Toys",
-  "discount": false,
-  "discountedPrice": 90.00
+    "category": "Toys",
+    "discount": false,
+    "discountedPrice": 90.00,
+    "stock": 4
   },
   {
     "id": 13,
@@ -216,9 +228,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Garden",
-  "discount": true,
-  "discountedPrice": 89.99
+    "category": "Garden",
+    "discount": true,
+    "discountedPrice": 89.99,
+    "stock": 20
   },
   {
     "id": 14,
@@ -233,9 +246,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Tools",
-  "discount": false,
-  "discountedPrice": 110.00
+    "category": "Tools",
+    "discount": false,
+    "discountedPrice": 110.00,
+    "stock": 9
   },
   {
     "id": 15,
@@ -250,9 +264,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Grocery",
-  "discount": true,
-  "discountedPrice": 99.99
+    "category": "Grocery",
+    "discount": true,
+    "discountedPrice": 99.99,
+    "stock": 0
   },
   {
     "id": 16,
@@ -267,9 +282,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Health",
-  "discount": false,
-  "discountedPrice": 130.00
+    "category": "Health",
+    "discount": false,
+    "discountedPrice": 130.00,
+    "stock": 45
   },
   {
     "id": 17,
@@ -284,9 +300,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Beauty",
-  "discount": true,
-  "discountedPrice": 119.99
+    "category": "Beauty",
+    "discount": true,
+    "discountedPrice": 119.99,
+    "stock": 2
   },
   {
     "id": 18,
@@ -301,9 +318,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Pets",
-  "discount": false,
-  "discountedPrice": 150.00
+    "category": "Pets",
+    "discount": false,
+    "discountedPrice": 150.00,
+    "stock": 18
   },
   {
     "id": 19,
@@ -318,9 +336,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Kids",
-  "discount": true,
-  "discountedPrice": 139.99
+    "category": "Kids",
+    "discount": true,
+    "discountedPrice": 139.99,
+    "stock": 6
   },
   {
     "id": 20,
@@ -335,9 +354,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Baby",
-  "discount": false,
-  "discountedPrice": 170.00
+    "category": "Baby",
+    "discount": false,
+    "discountedPrice": 170.00,
+    "stock": 0
   },
   {
     "id": 21,
@@ -352,9 +372,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Handmade",
-  "discount": true,
-  "discountedPrice": 159.99
+    "category": "Handmade",
+    "discount": true,
+    "discountedPrice": 159.99,
+    "stock": 35
   },
   {
     "id": 22,
@@ -369,9 +390,10 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Sports",
-  "discount": false,
-  "discountedPrice": 190.00
+    "category": "Sports",
+    "discount": false,
+    "discountedPrice": 190.00,
+    "stock": 1
   },
   {
     "id": 23,
@@ -386,8 +408,9 @@
         "images/mockup.jpg"
       ]
     },
-  "category": "Outdoors",
-  "discount": true,
-  "discountedPrice": 179.99
+    "category": "Outdoors",
+    "discount": true,
+    "discountedPrice": 179.99,
+    "stock": 11
   }
 ]

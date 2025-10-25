@@ -53,6 +53,7 @@
         </div>
         <div class="product-info">
           <h1 id="product-title"></h1>
+          <div class="stock-status" id="stock-status"></div>
           <p class="product-price" id="product-price"></p>
           <p class="product-description" id="product-description"></p>
           <div class="product-actions">
@@ -82,6 +83,12 @@
           </div>
         </div>
       </div>
+
+      <!-- Related Products Section -->
+      <section class="related-products-section">
+        <h2>You Might Also Like</h2>
+        <div class="related-products-grid" id="related-products"></div>
+      </section>
     </main>
 
     <!-- Toast notification container -->
@@ -146,6 +153,21 @@
               });
 
               document.getElementById('product-title').textContent = product.name;
+              
+              // Display stock status
+              const stockStatus = document.getElementById('stock-status');
+              const stock = product.stock || 0;
+              if (stock > 10) {
+                stockStatus.innerHTML = '<i class="ri-checkbox-circle-line"></i> In Stock';
+                stockStatus.className = 'stock-status in-stock';
+              } else if (stock > 0 && stock <= 10) {
+                stockStatus.innerHTML = `<i class="ri-error-warning-line"></i> Only ${stock} left in stock!`;
+                stockStatus.className = 'stock-status low-stock';
+              } else {
+                stockStatus.innerHTML = '<i class="ri-close-circle-line"></i> Sold Out';
+                stockStatus.className = 'stock-status out-of-stock';
+              }
+              
               if (product.discount) {
                 document.getElementById('product-price').innerHTML = `<span class='product-original-price'>EGP ${product.price.toFixed(2)}</span> <span class='product-discounted-price'>EGP ${product.discountedPrice.toFixed(2)}</span>`;
               } else {
@@ -190,6 +212,39 @@
                   thumbsContainer.style.display = 'none';
                 }
               }
+
+              // Load related products (same category, exclude current product)
+              const relatedProducts = products.filter(p => 
+                p.category === product.category && p.id !== productId
+              ).slice(0, 4); // Show max 4 related products
+              
+              const relatedGrid = document.getElementById('related-products');
+              if (relatedProducts.length > 0) {
+                relatedProducts.forEach(relatedProduct => {
+                  const card = document.createElement('div');
+                  card.className = 'product-card';
+                  
+                  const primary = (relatedProduct.images && relatedProduct.images.primary) 
+                    ? relatedProduct.images.primary 
+                    : (relatedProduct.image || '');
+                  
+                  const priceHTML = relatedProduct.discount 
+                    ? `<span class="product-original-price">EGP ${relatedProduct.price.toFixed(2)}</span> <span class="product-discounted-price">EGP ${relatedProduct.discountedPrice.toFixed(2)}</span>`
+                    : `EGP ${relatedProduct.price.toFixed(2)}`;
+                  
+                  card.innerHTML = `
+                    <a href="product.html?id=${relatedProduct.id}" class="product-link">
+                      <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
+                      <h3 class="product-name">${relatedProduct.name}</h3>
+                      <p class="product-price">${priceHTML}</p>
+                    </a>
+                  `;
+                  relatedGrid.appendChild(card);
+                });
+              } else {
+                // Hide the section if no related products
+                document.querySelector('.related-products-section').style.display = 'none';
+              }
             } else {
               window.location.href = 'index.html'; // Redirect if product not found
             }
@@ -201,6 +256,19 @@
 
         // Add to cart functionality
         const addToCartBtn = document.getElementById('add-to-cart');
+        
+        // Check stock and disable button if needed
+        fetch('products.json')
+          .then(response => response.json())
+          .then(products => {
+            const product = products.find(p => p.id === productId);
+            if (product && product.stock === 0) {
+              addToCartBtn.disabled = true;
+              addToCartBtn.classList.add('disabled');
+              addToCartBtn.querySelector('.text').textContent = 'Out of Stock';
+            }
+          });
+        
         addToCartBtn.addEventListener('click', () => {
           const quantity = parseInt(quantityInput.value);
           for (let i = 0; i < quantity; i++) {
