@@ -10,12 +10,17 @@
   </head>
   <body>
     <header>
-      <button id="menu-toggle" class="hamburger-menu" aria-label="Toggle menu" aria-controls="category-sidebar" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <h1>Sakr Store</h1>
+      <div class="header-left">
+        <button id="menu-toggle" class="hamburger-menu" aria-label="Toggle menu" aria-controls="category-sidebar" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button onclick="history.back()" class="back-btn" aria-label="Go back">
+          <i class="ri-arrow-left-line"></i>
+        </button>
+      </div>
+      <h1><a href="index.html" class="store-title">Sakr Store</a></h1>
       <nav>
         <button id="theme-toggle-btn" aria-label="Toggle dark mode">
           <i class="ri-sun-line" id="light-icon"></i>
@@ -30,6 +35,15 @@
     <div id="menu-overlay" class="menu-overlay"></div>
     
     <main class="product-detail-page">
+      <!-- Breadcrumb navigation -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html"><i class="ri-home-line"></i> Home</a></li>
+          <li><span id="breadcrumb-category">Products</span></li>
+          <li><span id="breadcrumb-product">Product Details</span></li>
+        </ol>
+      </nav>
+
       <div class="product-container">
         <div class="product-media-column">
           <div class="product-image">
@@ -51,6 +65,22 @@
               <i class="ri-shopping-cart-2-line"></i>
               Add to Cart
             </button>
+          </div>
+          
+          <!-- Trust badges -->
+          <div class="trust-badges">
+            <div class="trust-badge">
+              <i class="ri-shield-check-line"></i>
+              <span>Secure Payment</span>
+            </div>
+            <div class="trust-badge">
+              <i class="ri-arrow-left-right-line"></i>
+              <span>Easy Returns</span>
+            </div>
+            <div class="trust-badge">
+              <i class="ri-vip-crown-line"></i>
+              <span>Quality Guarantee</span>
+            </div>
           </div>
         </div>
       </div>
@@ -124,6 +154,16 @@
                 document.getElementById('product-price').textContent = `EGP ${product.price.toFixed(2)}`;
               }
               document.getElementById('product-description').textContent = product.description || '';
+
+              // Update breadcrumb
+              const breadcrumbCategory = document.getElementById('breadcrumb-category');
+              const breadcrumbProduct = document.getElementById('breadcrumb-product');
+              if (product.category) {
+                breadcrumbCategory.textContent = product.category;
+              }
+              if (product.name) {
+                breadcrumbProduct.textContent = product.name;
+              }
 
               // Build thumbnails if more than one image
               const thumbsContainer = document.getElementById('product-thumbnails');
