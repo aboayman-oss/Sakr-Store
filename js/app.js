@@ -307,13 +307,19 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
  * @param {HTMLElement} totalSpan - The span for the total price.
  */
 async function renderCart(container, totalSpan) {
+
   const cart = getCart();
   const allProducts = await fetchProducts();
 
+  // Empty cart state
+  const emptyCartActions = document.getElementById('empty-cart-actions');
   if (cart.size === 0) {
     container.innerHTML = '<p>Your cart is empty.</p>';
+    if (emptyCartActions) emptyCartActions.style.display = 'block';
     if (totalSpan) totalSpan.textContent = '0.00';
     return;
+  } else {
+    if (emptyCartActions) emptyCartActions.style.display = 'none';
   }
 
   container.innerHTML = ''; // Clear previous content
