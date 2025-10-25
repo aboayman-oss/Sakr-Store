@@ -1,3 +1,13 @@
+/* Prevent price from breaking into two lines and stack discounted price below original */
+.no-break {
+  white-space: nowrap;
+}
+.vertical-price-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1em;
+}
 /* Discount price styles */
 .product-original-price {
   text-decoration: line-through;
