@@ -85,6 +85,27 @@ const debounce = (fn, wait = 250) => {
   };
 };
 
+// --- Images helpers (primary/gallery) ---
+/**
+ * Returns the primary image URL for a product, supporting the new images schema
+ * with graceful fallback to legacy `image` field.
+ * @param {object} product
+ * @returns {string}
+ */
+function getPrimaryImage(product) {
+  if (!product) return '';
+  // New schema preferred
+  if (product.images && typeof product.images === 'object') {
+    if (product.images.primary) return product.images.primary;
+    // If only gallery provided, pick the first item
+    if (Array.isArray(product.images.gallery) && product.images.gallery.length > 0) {
+      return product.images.gallery[0];
+    }
+  }
+  // Legacy fallback
+  return product.image || '';
+}
+
 // --- Cart Management ---
 
 /**
@@ -260,7 +281,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     card.innerHTML = `
       <a href="product.html?id=${p.id}" class="product-link product-card-link" aria-label="${p.name || 'View product'}">
         <div class="product-media">
-          <img src="${p.image || ''}" alt="${p.name || 'Product image'}" loading="lazy">
+          <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
         <h3>${p.name || 'Untitled'}</h3>
         <p class="product-desc">${p.description || ''}</p>

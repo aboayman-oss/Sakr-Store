@@ -31,8 +31,11 @@
     
     <main class="product-detail-page">
       <div class="product-container">
-        <div class="product-image">
-          <img src="" alt="" id="product-image">
+        <div class="product-media-column">
+          <div class="product-image">
+            <img src="" alt="" id="product-image">
+          </div>
+          <div class="product-thumbnails" id="product-thumbnails" aria-label="More product images"></div>
         </div>
         <div class="product-info">
           <h1 id="product-title"></h1>
@@ -86,8 +89,15 @@
           .then(products => {
             const product = products.find(p => p.id === productId);
             if (product) {
-              document.getElementById('product-image').src = product.image;
-              document.getElementById('product-image').alt = product.name;
+              // Resolve images: primary + gallery (new schema) with fallback to legacy `image`
+              const primary = (product.images && product.images.primary) ? product.images.primary : (product.image || '');
+              const gallery = (product.images && Array.isArray(product.images.gallery)) ? product.images.gallery : [];
+              const allImages = [primary, ...gallery].filter(Boolean);
+
+              const mainImgEl = document.getElementById('product-image');
+              mainImgEl.src = allImages[0] || '';
+              mainImgEl.alt = product.name || 'Product image';
+
               document.getElementById('product-title').textContent = product.name;
               if (product.discount) {
                 document.getElementById('product-price').innerHTML = `<span class='product-original-price'>EGP ${product.price.toFixed(2)}</span> <span class='product-discounted-price'>EGP ${product.discountedPrice.toFixed(2)}</span>`;
@@ -95,6 +105,33 @@
                 document.getElementById('product-price').textContent = `EGP ${product.price.toFixed(2)}`;
               }
               document.getElementById('product-description').textContent = product.description || '';
+
+              // Build thumbnails if more than one image
+              const thumbsContainer = document.getElementById('product-thumbnails');
+              if (thumbsContainer) {
+                thumbsContainer.innerHTML = '';
+                if (allImages.length > 1) {
+                  allImages.forEach((src, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'thumbnail-btn' + (idx === 0 ? ' active' : '');
+                    btn.type = 'button';
+                    btn.setAttribute('aria-label', 'View image ' + (idx + 1));
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = product.name ? `${product.name} - image ${idx + 1}` : `Image ${idx + 1}`;
+                    btn.appendChild(img);
+                    btn.addEventListener('click', () => {
+                      mainImgEl.src = src;
+                      thumbsContainer.querySelectorAll('.thumbnail-btn').forEach(el => el.classList.remove('active'));
+                      btn.classList.add('active');
+                    });
+                    thumbsContainer.appendChild(btn);
+                  });
+                } else {
+                  // Hide the thumbnails container if only one image
+                  thumbsContainer.style.display = 'none';
+                }
+              }
             } else {
               window.location.href = 'index.html'; // Redirect if product not found
             }
