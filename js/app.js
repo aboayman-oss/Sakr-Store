@@ -248,10 +248,10 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     card.className = 'product-card';
     let priceHtml = '';
     if (p.discount) {
-      priceHtml = `<span class="product-original-price" style="text-decoration:line-through;color:#888;font-size:1rem;margin-right:0.5em;">$${(Number(p.price) || 0).toFixed(2)}</span>` +
-        `<span class="product-discounted-price" style="color:#e53935;font-weight:700;font-size:1.3rem;">$${(Number(p.discountedPrice) || 0).toFixed(2)}</span>`;
+      priceHtml = `<span class="product-original-price" style="text-decoration:line-through;color:#888;font-size:1rem;margin-right:0.5em;">EGP ${(Number(p.price) || 0).toFixed(2)}</span>` +
+        `<span class="product-discounted-price" style="color:#e53935;font-weight:700;font-size:1.3rem;">EGP ${(Number(p.discountedPrice) || 0).toFixed(2)}</span>`;
     } else {
-      priceHtml = `<span class="product-price">$${(Number(p.price) || 0).toFixed(2)}</span>`;
+      priceHtml = `<span class="product-price">EGP ${(Number(p.price) || 0).toFixed(2)}</span>`;
     }
     // Make the entire card (except price/button footer) clickable for better UX and accessibility
     card.innerHTML = `
@@ -303,10 +303,10 @@ async function renderCart(container, totalSpan) {
     let priceHtml = '';
     if (product.discount) {
       itemTotal = (Number(product.discountedPrice) || 0) * qty;
-      priceHtml = `<span class='product-original-price'>$${(Number(product.price) || 0).toFixed(2)}</span> <span class='product-discounted-price'>$${(Number(product.discountedPrice) || 0).toFixed(2)}</span> x ${qty} = <span class='product-discounted-price'>$${itemTotal.toFixed(2)}</span>`;
+      priceHtml = `<span class='product-original-price'>EGP ${(Number(product.price) || 0).toFixed(2)}</span> <span class='product-discounted-price'>EGP ${(Number(product.discountedPrice) || 0).toFixed(2)}</span> x ${qty} = <span class='product-discounted-price'>EGP ${itemTotal.toFixed(2)}</span>`;
     } else {
       itemTotal = (Number(product.price) || 0) * qty;
-      priceHtml = `$${((Number(product.price) || 0).toFixed(2))} x ${qty} = $${itemTotal.toFixed(2)}`;
+      priceHtml = `EGP ${((Number(product.price) || 0).toFixed(2))} x ${qty} = EGP ${itemTotal.toFixed(2)}`;
     }
     total += itemTotal;
 
@@ -357,7 +357,7 @@ function showToast(message) {
           </span>
         </div>
         <div class="notification-product">${product ? product.name : 'Product'}</div>
-        <div class="notification-price">${product ? `$${product.price.toFixed(2)}` : ''}</div>
+        <div class="notification-price">${product ? `EGP ${product.price.toFixed(2)}` : ''}</div>
         <button class="notification-button" onclick="window.location.href='cart.html'">
           View cart
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -622,7 +622,7 @@ async function initCheckoutForm() {
       if (!product) continue;
       const price = Number(product.price) || 0;
       total += price * qty;
-      lines.push(`- ${qty}x ${product.name} - $${(price * qty).toFixed(2)}`);
+      lines.push(`- ${qty}x ${product.name} - EGP ${(price * qty).toFixed(2)}`);
     }
 
     const message = [
@@ -636,7 +636,7 @@ async function initCheckoutForm() {
       '*Order Summary:*',
       ...lines,
       '---------------------',
-      `*Total: $${total.toFixed(2)}*`,
+      `*Total: EGP ${total.toFixed(2)}*`,
       '',
       'Thank you!'
     ].join('\n');
