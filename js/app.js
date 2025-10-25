@@ -220,10 +220,12 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     );
   }
 
-  // 2. Filter by category
-  filteredProducts = filteredProducts.filter(p =>
-    categoryFilter === 'All' || (p.category && p.category.toLowerCase() === categoryFilter.toLowerCase())
-  );
+  // 2. Filter by category or discounts
+  filteredProducts = filteredProducts.filter(p => {
+    if (categoryFilter === 'All') return true;
+    if (categoryFilter === 'Discounts') return !!p.discount;
+    return p.category && p.category.toLowerCase() === categoryFilter.toLowerCase();
+  });
 
   // 3. Filter by price (if a max price is set)
   if (priceMax !== null) {
@@ -427,14 +429,17 @@ async function initMainPage() {
       await fetchProducts(); // Populate the global 'products' array
     
       // Populate categories sidebar
-      const categories = new Set(['All']); // Start with 'All' category
+      // Build categories: All, Discounts, then the rest
+      const categories = ['All', 'Discounts'];
+      const categorySet = new Set();
       products.forEach(p => {
         if (p.category) {
-          categories.add(p.category);
+          categorySet.add(p.category);
         }
       });
-    
-      categoryListEl.innerHTML = ''; // Clear existing categories
+      categories.push(...Array.from(categorySet));
+
+      categoryListEl.innerHTML = '';
       categories.forEach(category => {
         const li = document.createElement('li');
         const button = document.createElement('button');
@@ -452,9 +457,11 @@ async function initMainPage() {
         // Guard clause: If slider elements don't exist, do nothing.
         if (!priceSliderEl || !priceValueEl) return;
 
-        const relevantProducts = products.filter(p =>
-          currentCategoryFilter === 'All' || (p.category && p.category.toLowerCase() === currentCategoryFilter.toLowerCase())
-        );
+        const relevantProducts = products.filter(p => {
+          if (currentCategoryFilter === 'All') return true;
+          if (currentCategoryFilter === 'Discounts') return !!p.discount;
+          return p.category && p.category.toLowerCase() === currentCategoryFilter.toLowerCase();
+        });
         
         if (relevantProducts.length === 0) {
           priceSliderEl.min = 0;
