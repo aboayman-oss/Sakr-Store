@@ -614,11 +614,24 @@ nav a:hover {
   box-shadow: var(--shadow-md);
 }
 
-.product-image {
+/* Product list image container to keep a consistent aspect ratio without cropping */
+.product-media {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  aspect-ratio: 1 / 1; /* uniform square thumbnails across all cards */
   background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* prevent cropping or distortion */
+  object-position: center;
+  display: block;
+  padding: var(--space-sm);
 }
 
 .product-info {
@@ -803,7 +816,6 @@ nav a:hover {
 #product-list-container { flex-grow: 1; padding: 0; } /* Product list takes remaining space, remove its own padding */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
 .product-card { border: 1px solid var(--card-border); padding: 0.75rem; border-radius: 6px; background: var(--card-bg); }
-.product-image { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; }
 .product-price { font-weight: bold; margin-top: 0.5rem; }
 
 .CartBtn {
@@ -1254,9 +1266,7 @@ nav a:hover {
     padding: 0.5rem;
     font-size: 0.98rem;
   }
-  .product-image {
-    height: 120px;
-  }
+  /* Thumbnails remain square; container scales with column width */
   .CartBtn {
     width: 100%;
     min-width: 0;

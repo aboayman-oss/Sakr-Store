@@ -253,9 +253,13 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     } else {
       priceHtml = `<span class="product-price">$${(Number(p.price) || 0).toFixed(2)}</span>`;
     }
+    // Product media is wrapped to enforce a uniform aspect ratio without cropping or distortion
     card.innerHTML = `
-      <a href="product.html?id=${p.id}" class="product-link">
-        <img src="${p.image || ''}" alt="${p.name || 'Product image'}" class="product-image">
+      <div class="product-media">
+        <a href="product.html?id=${p.id}" class="product-link" aria-label="${p.name || 'View product'}">
+          <img src="${p.image || ''}" alt="${p.name || 'Product image'}" loading="lazy">
+        </a>
+      </div>
       <h3>${p.name || 'Untitled'}</h3>
       <p class="product-desc">${p.description || ''}</p>
       <div class="product-price-block">${priceHtml}</div>
