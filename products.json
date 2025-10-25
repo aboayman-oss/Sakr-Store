@@ -5,7 +5,9 @@
     "price": 25.00,
     "description": "A high-quality, 100% cotton t-shirt.",
     "image": "images/tshirt.jpg",
-    "category": "Apparel"
+  "category": "Apparel",
+  "discount": true,
+  "discountedPrice": 19.99
   },
   {
     "id": 2,
@@ -13,7 +15,9 @@
     "price": 15.50,
     "description": "A stylish ceramic mug with a matte finish.",
     "image": "images/mug.jpg",
-    "category": "Home Goods"
+  "category": "Home Goods",
+  "discount": false,
+  "discountedPrice": 15.50
   },
   {
     "id": 3,
@@ -21,7 +25,9 @@
     "price": 19.99,
     "description": "A durable and spacious tote bag.",
     "image": "images/tote.jpg",
-    "category": "Accessories"
+  "category": "Accessories",
+  "discount": true,
+  "discountedPrice": 14.99
   },
   {
     "id": 4,
@@ -29,7 +35,9 @@
     "price": 10.00,
     "description": "This is a description for Mockup Product 1.",
     "image": "images/mockup.jpg",
-    "category": "Apparel"
+  "category": "Apparel",
+  "discount": false,
+  "discountedPrice": 10.00
   },
   {
     "id": 5,
@@ -37,7 +45,9 @@
     "price": 20.00,
     "description": "This is a description for Mockup Product 2.",
     "image": "images/mockup.jpg",
-    "category": "Home Goods"
+  "category": "Home Goods",
+  "discount": true,
+  "discountedPrice": 16.00
   },
   {
     "id": 6,
@@ -45,7 +55,9 @@
     "price": 30.00,
     "description": "This is a description for Mockup Product 3.",
     "image": "images/mockup.jpg",
-    "category": "Accessories"
+  "category": "Accessories",
+  "discount": false,
+  "discountedPrice": 30.00
   },
   {
     "id": 7,
@@ -53,7 +65,9 @@
     "price": 40.00,
     "description": "This is a description for Mockup Product 4.",
     "image": "images/mockup.jpg",
-    "category": "Electronics"
+  "category": "Electronics",
+  "discount": true,
+  "discountedPrice": 34.99
   },
   {
     "id": 8,
@@ -61,7 +75,9 @@
     "price": 50.00,
     "description": "This is a description for Mockup Product 5.",
     "image": "images/mockup.jpg",
-    "category": "Books"
+  "category": "Books",
+  "discount": false,
+  "discountedPrice": 50.00
   },
   {
     "id": 9,
@@ -69,7 +85,9 @@
     "price": 60.00,
     "description": "This is a description for Mockup Product 6.",
     "image": "images/mockup.jpg",
-    "category": "Music"
+  "category": "Music",
+  "discount": true,
+  "discountedPrice": 49.99
   },
   {
     "id": 10,
@@ -77,7 +95,9 @@
     "price": 70.00,
     "description": "This is a description for Mockup Product 7.",
     "image": "images/mockup.jpg",
-    "category": "Games"
+  "category": "Games",
+  "discount": false,
+  "discountedPrice": 70.00
   },
   {
     "id": 11,
@@ -85,7 +105,9 @@
     "price": 80.00,
     "description": "This is a description for Mockup Product 8.",
     "image": "images/mockup.jpg",
-    "category": "Movies"
+  "category": "Movies",
+  "discount": true,
+  "discountedPrice": 69.99
   },
   {
     "id": 12,
@@ -93,7 +115,9 @@
     "price": 90.00,
     "description": "This is a description for Mockup Product 9.",
     "image": "images/mockup.jpg",
-    "category": "Toys"
+  "category": "Toys",
+  "discount": false,
+  "discountedPrice": 90.00
   },
   {
     "id": 13,
@@ -101,7 +125,9 @@
     "price": 100.00,
     "description": "This is a description for Mockup Product 10.",
     "image": "images/mockup.jpg",
-    "category": "Garden"
+  "category": "Garden",
+  "discount": true,
+  "discountedPrice": 89.99
   },
   {
     "id": 14,
@@ -109,7 +135,9 @@
     "price": 110.00,
     "description": "This is a description for Mockup Product 11.",
     "image": "images/mockup.jpg",
-    "category": "Tools"
+  "category": "Tools",
+  "discount": false,
+  "discountedPrice": 110.00
   },
   {
     "id": 15,
@@ -117,7 +145,9 @@
     "price": 120.00,
     "description": "This is a description for Mockup Product 12.",
     "image": "images/mockup.jpg",
-    "category": "Grocery"
+  "category": "Grocery",
+  "discount": true,
+  "discountedPrice": 99.99
   },
   {
     "id": 16,
@@ -125,7 +155,9 @@
     "price": 130.00,
     "description": "This is a description for Mockup Product 13.",
     "image": "images/mockup.jpg",
-    "category": "Health"
+  "category": "Health",
+  "discount": false,
+  "discountedPrice": 130.00
   },
   {
     "id": 17,
@@ -133,7 +165,9 @@
     "price": 140.00,
     "description": "This is a description for Mockup Product 14.",
     "image": "images/mockup.jpg",
-    "category": "Beauty"
+  "category": "Beauty",
+  "discount": true,
+  "discountedPrice": 119.99
   },
   {
     "id": 18,
@@ -141,7 +175,9 @@
     "price": 150.00,
     "description": "This is a description for Mockup Product 15.",
     "image": "images/mockup.jpg",
-    "category": "Pets"
+  "category": "Pets",
+  "discount": false,
+  "discountedPrice": 150.00
   },
   {
     "id": 19,
@@ -149,7 +185,9 @@
     "price": 160.00,
     "description": "This is a description for Mockup Product 16.",
     "image": "images/mockup.jpg",
-    "category": "Kids"
+  "category": "Kids",
+  "discount": true,
+  "discountedPrice": 139.99
   },
   {
     "id": 20,
@@ -157,7 +195,9 @@
     "price": 170.00,
     "description": "This is a description for Mockup Product 17.",
     "image": "images/mockup.jpg",
-    "category": "Baby"
+  "category": "Baby",
+  "discount": false,
+  "discountedPrice": 170.00
   },
   {
     "id": 21,
@@ -165,7 +205,9 @@
     "price": 180.00,
     "description": "This is a description for Mockup Product 18.",
     "image": "images/mockup.jpg",
-    "category": "Handmade"
+  "category": "Handmade",
+  "discount": true,
+  "discountedPrice": 159.99
   },
   {
     "id": 22,
@@ -173,7 +215,9 @@
     "price": 190.00,
     "description": "This is a description for Mockup Product 19.",
     "image": "images/mockup.jpg",
-    "category": "Sports"
+  "category": "Sports",
+  "discount": false,
+  "discountedPrice": 190.00
   },
   {
     "id": 23,
@@ -181,6 +225,8 @@
     "price": 200.00,
     "description": "This is a description for Mockup Product 20.",
     "image": "images/mockup.jpg",
-    "category": "Outdoors"
+  "category": "Outdoors",
+  "discount": true,
+  "discountedPrice": 179.99
   }
 ]
