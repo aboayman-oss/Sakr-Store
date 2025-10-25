@@ -5,6 +5,13 @@
     "price": 25.00,
     "description": "A high-quality, 100% cotton t-shirt.",
     "image": "images/tshirt.jpg",
+    "images": {
+      "primary": "images/tshirt.jpg",
+      "gallery": [
+        "images/mockup.jpg",
+        "images/mockup.jpg"
+      ]
+    },
   "category": "Apparel",
   "discount": true,
   "discountedPrice": 19.99
@@ -15,6 +22,13 @@
     "price": 15.50,
     "description": "A stylish ceramic mug with a matte finish.",
     "image": "images/mug.jpg",
+    "images": {
+      "primary": "images/mug.jpg",
+      "gallery": [
+        "images/mockup.jpg",
+        "images/mockup.jpg"
+      ]
+    },
   "category": "Home Goods",
   "discount": false,
   "discountedPrice": 15.50
@@ -25,6 +39,13 @@
     "price": 19.99,
     "description": "A durable and spacious tote bag.",
     "image": "images/tote.jpg",
+    "images": {
+      "primary": "images/tote.jpg",
+      "gallery": [
+        "images/mockup.jpg",
+        "images/mockup.jpg"
+      ]
+    },
   "category": "Accessories",
   "discount": true,
   "discountedPrice": 14.99

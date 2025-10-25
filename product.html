@@ -58,6 +58,14 @@
 
     <!-- Toast notification container -->
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Lightbox overlay for product images -->
+    <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Product image gallery">
+      <button class="lightbox-close" aria-label="Close gallery">&times;</button>
+      <button class="lightbox-nav prev" aria-label="Previous image">&#10094;</button>
+      <img id="lightbox-image" alt="Product image enlarged">
+      <button class="lightbox-nav next" aria-label="Next image">&#10095;</button>
+    </div>
     
     <script src="js/app.js"></script>
     <script>
@@ -84,6 +92,9 @@
         });
 
         // Load and display product details
+        let currentImageIndex = 0; // track current main image index for lightbox
+        let currentImages = [];    // track all images for this product
+
         fetch('products.json')
           .then(response => response.json())
           .then(products => {
@@ -93,10 +104,18 @@
               const primary = (product.images && product.images.primary) ? product.images.primary : (product.image || '');
               const gallery = (product.images && Array.isArray(product.images.gallery)) ? product.images.gallery : [];
               const allImages = [primary, ...gallery].filter(Boolean);
+              currentImages = allImages;
 
               const mainImgEl = document.getElementById('product-image');
               mainImgEl.src = allImages[0] || '';
               mainImgEl.alt = product.name || 'Product image';
+              currentImageIndex = 0;
+
+              // Clicking the main image opens the lightbox at the current index
+              mainImgEl.style.cursor = allImages.length > 0 ? 'zoom-in' : 'default';
+              mainImgEl.addEventListener('click', () => {
+                if (currentImages.length > 0) openLightbox(currentImageIndex);
+              });
 
               document.getElementById('product-title').textContent = product.name;
               if (product.discount) {
@@ -122,6 +141,7 @@
                     btn.appendChild(img);
                     btn.addEventListener('click', () => {
                       mainImgEl.src = src;
+                      currentImageIndex = idx;
                       thumbsContainer.querySelectorAll('.thumbnail-btn').forEach(el => el.classList.remove('active'));
                       btn.classList.add('active');
                     });
@@ -152,6 +172,46 @@
           // Visual feedback
           addToCartBtn.classList.add('added');
           setTimeout(() => addToCartBtn.classList.remove('added'), 1000);
+        });
+        // Lightbox logic
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-image');
+        const btnPrev = document.querySelector('.lightbox-nav.prev');
+        const btnNext = document.querySelector('.lightbox-nav.next');
+        const btnClose = document.querySelector('.lightbox-close');
+
+        function setLightboxImage(index) {
+          if (!currentImages.length) return;
+          currentImageIndex = (index + currentImages.length) % currentImages.length;
+          lightboxImg.src = currentImages[currentImageIndex];
+        }
+
+        function openLightbox(index = 0) {
+          if (!currentImages.length) return;
+          setLightboxImage(index);
+          lightbox.classList.add('open');
+          lightbox.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('lb-open');
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove('open');
+          lightbox.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('lb-open');
+        }
+
+        btnPrev.addEventListener('click', () => setLightboxImage(currentImageIndex - 1));
+        btnNext.addEventListener('click', () => setLightboxImage(currentImageIndex + 1));
+        btnClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) closeLightbox(); // click on backdrop closes
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (!lightbox.classList.contains('open')) return;
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') setLightboxImage(currentImageIndex - 1);
+          if (e.key === 'ArrowRight') setLightboxImage(currentImageIndex + 1);
         });
       });
     </script>
