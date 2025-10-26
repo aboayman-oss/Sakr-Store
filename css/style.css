@@ -2132,6 +2132,7 @@ nav a:hover {
     justify-content: center;
     gap: 0.625rem;
     width: calc(100% - 1rem);
+    max-width: 100%;
     margin: 0 0.5rem 1rem 0.5rem;
     padding: 1rem 1.25rem;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
@@ -2147,10 +2148,18 @@ nav a:hover {
     top: 0;
     z-index: 100;
     letter-spacing: -0.01em;
+    overflow: visible;
   }
 
   .mobile-filter-btn i {
     font-size: 1.375rem;
+    display: inline-block;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  
+  .mobile-filter-btn span {
+    white-space: nowrap;
   }
 
   .mobile-filter-btn:active {
@@ -2194,8 +2203,20 @@ nav a:hover {
   }
   
   .hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
+  }
+  
+  .hamburger-menu span {
+    display: block;
+    width: 20px;
+    height: 2.5px;
+    background-color: var(--header-text);
+    margin: 3px auto;
   }
   
   .main-content-wrapper {
@@ -2601,5 +2622,25 @@ nav a:hover {
     padding: 0.75rem 0.75rem 0.75rem 2.5rem;
     font-size: 0.875rem;
     background-position: 0.75rem center;
+  }
+  
+  /* Ensure hamburger is always visible on very small screens */
+  .hamburger-menu {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .hamburger-menu span {
+    display: block !important;
+    width: 20px;
+    height: 2.5px;
+    background-color: var(--header-text);
+    margin: 3px auto;
+  }
+  
+  header h1 {
+    font-size: 1.25rem;
   }
 }
