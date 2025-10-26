@@ -1775,6 +1775,7 @@ nav a:hover {
 
 /* --- Filter Pane (moved under search bar) --- */
 .filter-pane {
+  margin-top: 1.5rem;
   padding: 0 1rem 1.25rem 1rem;
   box-sizing: border-box;
 }
@@ -2236,7 +2237,7 @@ nav a:hover {
     gap: 0.625rem;
     width: calc(100% - 1rem);
     max-width: 100%;
-    margin: 0 0.5rem 1rem 0.5rem;
+    margin: 1.5rem 0.5rem 1rem 0.5rem;
     padding: 1rem 1.25rem;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     color: var(--primary-text);
