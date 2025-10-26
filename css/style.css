@@ -1617,7 +1617,15 @@ nav a:hover {
 
 /* Make filters stack neatly on small screens */
 @media (max-width: 600px) {
-  .filter-pane { padding: 0 0.5rem 0.5rem 0.5rem; }
+  .filter-pane { 
+    padding: 0.5rem; 
+    position: sticky;
+    top: 0;
+    background: var(--bg-color);
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+  }
   .filter-pane .filter-inner { flex-direction: column; align-items: stretch; gap: 0.5rem; }
   .price-block { margin-left: 0; justify-content: flex-start; }
   #price-slider { width: 100%; }
@@ -1649,12 +1657,31 @@ nav a:hover {
     padding: 0;
   }
   .product-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    grid-template-columns: repeat(2, 1fr); /* 2-column grid on mobile */
+    gap: 0.5rem; /* Reduced from 0.75rem */
   }
   .product-card {
-    padding: 0.5rem;
-    font-size: 0.98rem;
+    padding: 0; /* Removed padding to save space */
+    font-size: 0.9rem; /* Slightly smaller for 2 columns */
+  }
+  .product-info {
+    padding: 0.5rem; /* Reduced from 1rem */
+  }
+  .product-title {
+    font-size: 0.95rem; /* Slightly smaller */
+    margin-bottom: 0.25rem; /* Reduced spacing */
+  }
+  .product-description {
+    font-size: 0.9rem; /* Smaller text */
+    margin-bottom: 0.5rem; /* Reduced from 1rem */
+    line-height: 1.3; /* Tighter line height */
+  }
+  .product-price {
+    margin-bottom: 0.5rem; /* Reduced spacing */
+    min-height: 1.5em; /* Reduced from 2em */
+  }
+  .product-media {
+    aspect-ratio: 1 / 1; /* Keep square but will be smaller overall */
   }
   /* Thumbnails remain square; container scales with column width */
   /* Button already full width from base styles, just adjust height for mobile */
