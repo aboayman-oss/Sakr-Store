@@ -615,14 +615,16 @@ function showToast(message) {
  * Updates the cart counter in the header.
  */
 function updateCartCounter() {
-  const counter = document.querySelector('.cart-count');
-  if (!counter) return;
+  const counters = document.querySelectorAll('.cart-count');
+  if (counters.length === 0) return;
 
   const cart = getCart();
   const totalItems = Array.from(cart.values()).reduce((sum, qty) => sum + qty, 0);
 
-  counter.textContent = `${totalItems}`;
-  counter.style.display = totalItems > 0 ? 'inline' : 'none';
+  counters.forEach(counter => {
+    counter.textContent = `${totalItems}`;
+    counter.style.display = totalItems > 0 ? 'inline' : 'none';
+  });
 }
 
 // --- Event Handlers & Page Initializers ---

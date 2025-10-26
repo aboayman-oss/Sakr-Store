@@ -835,6 +835,11 @@ nav a:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Cart FAB - Hidden by default, shown only on mobile */
+.cart-fab {
+  display: none;
+}
+
 /* Hamburger Menu */
 .hamburger-menu {
   display: none;
@@ -2568,12 +2573,60 @@ nav a:hover {
     font-size: 1.35rem;
   }
   
+  /* Hide cart link in header on mobile */
   .cart-link {
-    padding: 0.4rem 0.75rem;
+    display: none;
   }
   
-  .cart-link i {
-    font-size: 1.35rem;
+  /* Modern FAB for cart on mobile */
+  .cart-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    color: var(--primary-text);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .cart-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5), 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .cart-fab:active {
+    transform: scale(0.95);
+  }
+  
+  .cart-fab i {
+    font-size: 1.5rem;
+  }
+  
+  .cart-fab .cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--cart-badge-bg);
+    color: var(--cart-badge-text);
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 1.5rem;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--bg-color);
   }
   
   #theme-toggle-btn {
