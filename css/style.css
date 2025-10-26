@@ -1787,6 +1787,142 @@ nav a:hover {
   outline-offset: 2px;
 }
 
+/* Special styling for Featured category */
+#category-list button[data-category="Featured"] {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #78350f;
+  font-weight: 700;
+  padding-left: 1rem;
+  border-left: 4px solid #d97706;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+#category-list button[data-category="Featured"]::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: -100%;
+  transform: none;
+  border-radius: 0;
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}
+
+#category-list button[data-category="Featured"]::after {
+  content: '⭐';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+#category-list button[data-category="Featured"]:hover {
+  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+  box-shadow: 0 6px 16px rgba(251, 191, 36, 0.5);
+  transform: translateX(4px);
+  padding-left: 1.5rem;
+}
+
+#category-list button[data-category="Featured"].active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6);
+}
+
+/* Special styling for Discounts category */
+#category-list button[data-category="Discounts"] {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: #ffffff;
+  font-weight: 700;
+  padding-left: 1rem;
+  border-left: 4px solid #991b1b;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+#category-list button[data-category="Discounts"]::before {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.1) 10px,
+    rgba(255, 255, 255, 0.1) 20px
+  );
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -100%;
+  transform: none;
+  border-radius: 0;
+  animation: slide 8s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+
+#category-list button[data-category="Discounts"]::after {
+  content: '🔥';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  animation: flame 1.5s ease-in-out infinite;
+}
+
+@keyframes flame {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    transform: translateY(-55%) scale(1.1);
+  }
+}
+
+#category-list button[data-category="Discounts"]:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5);
+  transform: translateX(4px);
+  padding-left: 1.5rem;
+}
+
+#category-list button[data-category="Discounts"].active {
+  background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+  box-shadow: 0 6px 20px rgba(153, 27, 27, 0.6);
+  border-left-color: #7f1d1d;
+}
+
 /* Theme Toggle Button */
 #theme-toggle-btn {
   background: none;

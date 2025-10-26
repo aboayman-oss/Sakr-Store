@@ -646,8 +646,8 @@ async function initMainPage() {
       await fetchProducts(); // Populate the global 'products' array
     
       // Populate categories sidebar
-      // Build categories: Featured (for new products), All, Discounts, then the rest
-      const categories = ['Featured', 'All', 'Discounts'];
+      // Build categories: Featured, Discounts, All, then the rest
+      const categories = ['Featured', 'Discounts', 'All'];
       const categorySet = new Set();
       products.forEach(p => {
         if (p.category) {
