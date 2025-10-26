@@ -2389,7 +2389,7 @@ nav a:hover {
     gap: 0.5rem; /* Reduced from 0.75rem */
   }
   .product-card {
-    padding: 0; /* Removed padding to save space */
+    padding: 0.5rem; /* Maintain some padding for better spacing */
     font-size: 0.9rem; /* Slightly smaller for 2 columns */
   }
   .product-info {
