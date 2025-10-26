@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.1em;
+  gap: 0.25rem;
+  justify-content: center;
+  min-height: 3.5rem;
 }
 /* Discount price styles */
 .product-original-price {
@@ -24,6 +26,10 @@
 .product-price-block {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  min-height: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 /* --- Theme Variables --- */
 :root {
@@ -810,6 +816,9 @@ nav a:hover {
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-speed) var(--transition-ease);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .product-card:hover {
@@ -847,6 +856,9 @@ nav a:hover {
 
 .product-info {
   padding: var(--space-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-title {
@@ -854,6 +866,7 @@ nav a:hover {
   font-weight: 600;
   margin-bottom: var(--space-xs);
   color: var(--text-color);
+  line-height: 1.4;
 }
 
 .product-price {
@@ -861,6 +874,9 @@ nav a:hover {
   font-weight: 700;
   color: var(--price-regular);
   margin-bottom: var(--space-sm);
+  min-height: 2em;
+  display: flex;
+  align-items: center;
 }
 
 .product-description {
@@ -868,6 +884,7 @@ nav a:hover {
   font-size: 1rem; /* Adjust font size */
   color: var(--secondary-text);
   margin-bottom: var(--space-md);
+  flex: 1;
 }
 
 .add-to-cart {
@@ -900,6 +917,29 @@ nav a:hover {
 
 .add-to-cart i {
   font-size: 1.25rem;
+}
+
+/* Product card title and description styles for grid cards */
+.product-card-link h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: var(--space-sm) 0;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.product-card-link .product-desc {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6em; /* Ensures consistent height for 2 lines */
 }
 
 /* Modern Responsive Styles */
@@ -1043,11 +1083,13 @@ nav a:hover {
   /* Use flexbox to make the button anchor to the bottom */
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 /* Make the card link grow to push the footer down */
 .product-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
   flex: 1; /* Takes up available space, pushing footer to bottom */
@@ -1066,6 +1108,10 @@ nav a:hover {
 .product-price-block {
   margin: 0; /* Remove default margins for tight spacing */
   padding: 0.25rem 0; /* Small vertical padding */
+  min-height: 3.5rem; /* Ensure consistent height for price area */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .CartBtn {
