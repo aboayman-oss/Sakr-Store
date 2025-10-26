@@ -66,6 +66,10 @@
   --info-color: #3b82f6;
   --info-bg: #dbeafe;
   
+  /* Cart Badge */
+  --cart-badge-bg: #f59e0b; /* Amber/yellow for cart count */
+  --cart-badge-text: #78350f; /* Dark brown text for contrast */
+  
   /* Spacing System */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -397,6 +401,10 @@ body.lb-open { overflow: hidden; }
   --warning-bg: #78350f;
   --info-color: #60a5fa;
   --info-bg: #1e3a8a;
+  
+  /* Cart Badge */
+  --cart-badge-bg: #fbbf24; /* Brighter amber/yellow for dark mode */
+  --cart-badge-text: #1e293b; /* Dark text for contrast */
 
   /* Dark mode specific shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
@@ -503,8 +511,8 @@ body.lb-open { overflow: hidden; }
 }
 
 .cart-count {
-  background: var(--primary-color);
-  color: var(--primary-text);
+  background: var(--cart-badge-bg);
+  color: var(--cart-badge-text);
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
   font-size: 0.75rem;
@@ -729,8 +737,8 @@ nav a:hover {
 }
 
 .cart-count {
-  background: var(--error-color);
-  color: var(--primary-text);
+  background: var(--cart-badge-bg);
+  color: var(--cart-badge-text);
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
   font-size: 0.75rem;

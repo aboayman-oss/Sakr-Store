@@ -444,7 +444,7 @@ function updateCartCounter() {
   const cart = getCart();
   const totalItems = Array.from(cart.values()).reduce((sum, qty) => sum + qty, 0);
 
-  counter.textContent = `(${totalItems})`;
+  counter.textContent = `${totalItems}`;
   counter.style.display = totalItems > 0 ? 'inline' : 'none';
 }
 
