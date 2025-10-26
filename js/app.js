@@ -204,7 +204,7 @@ function clearCart() {
  * @param {number} maxLength - The maximum length of the text.
  * @returns {string} The truncated text with ellipsis if needed.
  */
-function truncateText(text, maxLength = 20) {
+function truncateText(text, maxLength = 50) {
   if (!text) return '';
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength).trim() + '...';
@@ -296,7 +296,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
           <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
         <h3>${p.name || 'Untitled'}</h3>
-        <p class="product-desc">${truncateText(p.description, 150)}</p>
+        <p class="product-desc">${truncateText(p.description)}</p>
       </a>
       <div class="product-card-footer">
         <div class="product-price-block vertical-price-block">${priceHtml}</div>
