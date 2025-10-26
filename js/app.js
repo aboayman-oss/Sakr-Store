@@ -64,6 +64,33 @@ function initMobileMenu() {
   });
 }
 
+// --- Mobile Search Expansion ---
+function initMobileSearch() {
+  const searchBar = document.getElementById('search-bar');
+  if (!searchBar) return;
+
+  // Expand search on mobile when clicked
+  searchBar.addEventListener('click', function() {
+    if (window.innerWidth <= 768) {
+      this.classList.add('expanded');
+    }
+  });
+
+  // Collapse when clicking outside on mobile
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768 && searchBar && !searchBar.contains(e.target) && !searchBar.value) {
+      searchBar.classList.remove('expanded');
+    }
+  });
+
+  // Remove expanded class when window is resized to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      searchBar.classList.remove('expanded');
+    }
+  });
+}
+
 // --- Mobile Filter Sheet Management ---
 function initMobileFilterSheet() {
   const filterBtn = document.getElementById('mobile-filter-btn');
@@ -881,6 +908,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle(); // Set up the toggle button
   updateCartCounter(); // Update counter on every page load
   initMobileMenu(); // Initialize mobile menu functionality
+  initMobileSearch(); // Initialize mobile search expansion
   initMobileFilterSheet(); // Initialize mobile filter sheet
 
   // Run the logic for the current page
