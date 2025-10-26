@@ -34,9 +34,7 @@ def serve_directory(directory: Path):
 
 def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
-
-
-def capture(pages: Iterable[str], out_dir: Path) -> List[Path]:
+def capture(pages: Iterable[str], out_dir: Path, schemes: Iterable[str]) -> List[Path]:
     out_paths: List[Path] = []
     root = Path.cwd()
 
@@ -51,45 +49,76 @@ def capture(pages: Iterable[str], out_dir: Path) -> List[Path]:
                     continue
                 name = page_path.stem
 
-                # Desktop context
-                desktop_dir = out_dir / "desktop"
-                ensure_dir(desktop_dir)
-                with chromium.launch(headless=True) as browser:
-                    ctx = browser.new_context(
-                        viewport={"width": 1440, "height": 900},
-                        device_scale_factor=1,
-                        user_agent=None,
-                    )
-                    page = ctx.new_page()
-                    page.goto(f"{base_url}/{page_file}", wait_until="load", timeout=30000)
-                    page.wait_for_timeout(500)  # small settle time
-                    out_path = desktop_dir / f"{name}-desktop-full.png"
-                    page.screenshot(path=str(out_path), full_page=True)
-                    out_paths.append(out_path)
-                    ctx.close()
+                for scheme in schemes:
+                    scheme = scheme.lower()
+                    if scheme not in ("light", "dark"):
+                        print(f"[skip] Unknown scheme: {scheme}")
+                        continue
 
-                # Mobile context (iPhone 12-ish)
-                mobile_dir = out_dir / "mobile"
-                ensure_dir(mobile_dir)
-                with chromium.launch(headless=True) as browser:
-                    ctx = browser.new_context(
-                        viewport={"width": 375, "height": 812},
-                        device_scale_factor=3,
-                        is_mobile=True,
-                        has_touch=True,
-                        user_agent=(
-                            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
-                            "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
-                            "Mobile/15E148 Safari/604.1"
-                        ),
-                    )
-                    page = ctx.new_page()
-                    page.goto(f"{base_url}/{page_file}", wait_until="load", timeout=30000)
-                    page.wait_for_timeout(500)
-                    out_path = mobile_dir / f"{name}-mobile-full.png"
-                    page.screenshot(path=str(out_path), full_page=True)
-                    out_paths.append(out_path)
-                    ctx.close()
+                    # Desktop context
+                    desktop_dir = out_dir / scheme / "desktop"
+                    ensure_dir(desktop_dir)
+                    with chromium.launch(headless=True) as browser:
+                        ctx = browser.new_context(
+                            viewport={"width": 1440, "height": 900},
+                            device_scale_factor=1,
+                            user_agent=None,
+                            color_scheme=scheme,
+                        )
+                        # Force app theme via localStorage + data-theme attribute before any app scripts run
+                        _init_js = (
+                            """
+                            (() => {{
+                                try {{
+                                    localStorage.setItem('theme','{scheme}');
+                                    document.documentElement.setAttribute('data-theme','{scheme}');
+                                }} catch (e) {{}}
+                            }})();
+                            """
+                        ).format(scheme=scheme)
+                        ctx.add_init_script(_init_js)
+                        page = ctx.new_page()
+                        page.goto(f"{base_url}/{page_file}", wait_until="load", timeout=30000)
+                        page.wait_for_timeout(500)  # small settle time
+                        out_path = desktop_dir / f"{name}-desktop-full.png"
+                        page.screenshot(path=str(out_path), full_page=True)
+                        out_paths.append(out_path)
+                        ctx.close()
+
+                    # Mobile context (iPhone 12-ish)
+                    mobile_dir = out_dir / scheme / "mobile"
+                    ensure_dir(mobile_dir)
+                    with chromium.launch(headless=True) as browser:
+                        ctx = browser.new_context(
+                            viewport={"width": 375, "height": 812},
+                            device_scale_factor=3,
+                            is_mobile=True,
+                            has_touch=True,
+                            color_scheme=scheme,
+                            user_agent=(
+                                "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
+                                "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
+                                "Mobile/15E148 Safari/604.1"
+                            ),
+                        )
+                        _init_js = (
+                            """
+                            (() => {{
+                                try {{
+                                    localStorage.setItem('theme','{scheme}');
+                                    document.documentElement.setAttribute('data-theme','{scheme}');
+                                }} catch (e) {{}}
+                            }})();
+                            """
+                        ).format(scheme=scheme)
+                        ctx.add_init_script(_init_js)
+                        page = ctx.new_page()
+                        page.goto(f"{base_url}/{page_file}", wait_until="load", timeout=30000)
+                        page.wait_for_timeout(500)
+                        out_path = mobile_dir / f"{name}-mobile-full.png"
+                        page.screenshot(path=str(out_path), full_page=True)
+                        out_paths.append(out_path)
+                        ctx.close()
 
     return out_paths
 
@@ -103,6 +132,12 @@ def main():
         help="List of page files relative to repo root",
     )
     parser.add_argument(
+        "--schemes",
+        nargs="*",
+        default=["light", "dark"],
+        help="Color schemes to capture: light, dark (default: both)",
+    )
+    parser.add_argument(
         "--out",
         default=str(Path("screenshots") / "auto"),
         help="Output directory",
@@ -112,7 +147,7 @@ def main():
     out_dir = Path(args.out)
     ensure_dir(out_dir)
 
-    shots = capture(args.pages, out_dir)
+    shots = capture(args.pages, out_dir, args.schemes)
     print(f"Saved {len(shots)} screenshots to {out_dir}")
     for p in shots:
         print(f" - {p}")
