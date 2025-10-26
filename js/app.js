@@ -919,7 +919,8 @@ function applyInitialTheme() {
 
   const toggleBtn = document.getElementById('theme-toggle-btn');
   if (toggleBtn) {
-    toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    // Keep the inline SVGs and just update accessible label
+    toggleBtn.setAttribute('aria-label', savedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
   }
 }
 
@@ -935,7 +936,8 @@ function initThemeToggle() {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    // Icons are toggled by CSS; only update the accessible label
+    toggleBtn.setAttribute('aria-label', newTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
   });
 }
 

@@ -461,10 +461,14 @@ body.lb-open { overflow: hidden; }
   transform: translateY(0);
 }
 
-#theme-toggle-btn i {
-  font-size: 1.25rem;
+#theme-toggle-btn i,
+#theme-toggle-btn svg.icon {
+  font-size: 1.25rem; /* for <i> fallback */
+  width: 22px;
+  height: 22px;
   position: absolute;
   transition: all 0.5s var(--transition-ease);
+  fill: currentColor;
 }
 
 #light-icon {
