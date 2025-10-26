@@ -930,6 +930,7 @@ nav a:hover {
   overflow: hidden;
   display: grid;
   place-items: center;
+  position: relative;
 }
 
 .product-media img {
@@ -941,6 +942,63 @@ nav a:hover {
   padding: var(--space-sm);
   /* Subtle drop shadow around the image only */
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+}
+
+/* New Badge Styling - Modern and Eye-catching */
+.new-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+.new-badge::before {
+  content: '✨';
+  font-size: 0.875rem;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* New badge for product detail page */
+.product-detail-new-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  margin-bottom: var(--space-md);
+}
+
+.product-detail-new-badge::before {
+  content: '✨';
+  font-size: 1rem;
 }
 
 .product-info {

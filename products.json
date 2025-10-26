@@ -15,7 +15,8 @@
     "category": "Apparel",
     "discount": true,
     "discountedPrice": 19.99,
-    "stock": 25
+    "stock": 25,
+    "isNew": true
   },
   {
     "id": 2,
@@ -33,7 +34,8 @@
     "category": "Home Goods",
     "discount": false,
     "discountedPrice": 15.50,
-    "stock": 5
+    "stock": 5,
+    "isNew": false
   },
   {
     "id": 3,
@@ -51,7 +53,8 @@
     "category": "Accessories",
     "discount": true,
     "discountedPrice": 14.99,
-    "stock": 0
+    "stock": 0,
+    "isNew": true
   },
   {
     "id": 4,
@@ -69,7 +72,8 @@
     "category": "Apparel",
     "discount": false,
     "discountedPrice": 10.00,
-    "stock": 15
+    "stock": 15,
+    "isNew": false
   },
   {
     "id": 5,
@@ -87,7 +91,8 @@
     "category": "Home Goods",
     "discount": true,
     "discountedPrice": 16.00,
-    "stock": 8
+    "stock": 8,
+    "isNew": true
   },
   {
     "id": 6,
@@ -105,7 +110,8 @@
     "category": "Accessories",
     "discount": false,
     "discountedPrice": 30.00,
-    "stock": 3
+    "stock": 3,
+    "isNew": false
   },
   {
     "id": 7,
@@ -123,7 +129,8 @@
     "category": "Electronics",
     "discount": true,
     "discountedPrice": 34.99,
-    "stock": 50
+    "stock": 50,
+    "isNew": true
   },
   {
     "id": 8,
@@ -141,7 +148,8 @@
     "category": "Books",
     "discount": false,
     "discountedPrice": 50.00,
-    "stock": 12
+    "stock": 12,
+    "isNew": false
   },
   {
     "id": 9,
@@ -159,7 +167,8 @@
     "category": "Music",
     "discount": true,
     "discountedPrice": 49.99,
-    "stock": 7
+    "stock": 7,
+    "isNew": false
   },
   {
     "id": 10,
@@ -177,7 +186,8 @@
     "category": "Games",
     "discount": false,
     "discountedPrice": 70.00,
-    "stock": 0
+    "stock": 0,
+    "isNew": false
   },
   {
     "id": 11,
@@ -195,7 +205,8 @@
     "category": "Movies",
     "discount": true,
     "discountedPrice": 69.99,
-    "stock": 30
+    "stock": 30,
+    "isNew": true
   },
   {
     "id": 12,
@@ -213,7 +224,8 @@
     "category": "Toys",
     "discount": false,
     "discountedPrice": 90.00,
-    "stock": 4
+    "stock": 4,
+    "isNew": false
   },
   {
     "id": 13,
@@ -231,7 +243,8 @@
     "category": "Garden",
     "discount": true,
     "discountedPrice": 89.99,
-    "stock": 20
+    "stock": 20,
+    "isNew": false
   },
   {
     "id": 14,
@@ -249,7 +262,8 @@
     "category": "Tools",
     "discount": false,
     "discountedPrice": 110.00,
-    "stock": 9
+    "stock": 9,
+    "isNew": false
   },
   {
     "id": 15,
@@ -267,7 +281,8 @@
     "category": "Grocery",
     "discount": true,
     "discountedPrice": 99.99,
-    "stock": 0
+    "stock": 0,
+    "isNew": false
   },
   {
     "id": 16,
@@ -285,7 +300,8 @@
     "category": "Health",
     "discount": false,
     "discountedPrice": 130.00,
-    "stock": 45
+    "stock": 45,
+    "isNew": false
   },
   {
     "id": 17,
@@ -303,7 +319,8 @@
     "category": "Beauty",
     "discount": true,
     "discountedPrice": 119.99,
-    "stock": 2
+    "stock": 2,
+    "isNew": false
   },
   {
     "id": 18,
@@ -321,7 +338,8 @@
     "category": "Pets",
     "discount": false,
     "discountedPrice": 150.00,
-    "stock": 18
+    "stock": 18,
+    "isNew": false
   },
   {
     "id": 19,
@@ -339,7 +357,8 @@
     "category": "Kids",
     "discount": true,
     "discountedPrice": 139.99,
-    "stock": 6
+    "stock": 6,
+    "isNew": false
   },
   {
     "id": 20,
@@ -357,7 +376,8 @@
     "category": "Baby",
     "discount": false,
     "discountedPrice": 170.00,
-    "stock": 0
+    "stock": 0,
+    "isNew": false
   },
   {
     "id": 21,
@@ -375,7 +395,8 @@
     "category": "Handmade",
     "discount": true,
     "discountedPrice": 159.99,
-    "stock": 35
+    "stock": 35,
+    "isNew": false
   },
   {
     "id": 22,
@@ -393,7 +414,8 @@
     "category": "Sports",
     "discount": false,
     "discountedPrice": 190.00,
-    "stock": 1
+    "stock": 1,
+    "isNew": false
   },
   {
     "id": 23,
@@ -411,6 +433,7 @@
     "category": "Outdoors",
     "discount": true,
     "discountedPrice": 179.99,
-    "stock": 11
+    "stock": 11,
+    "isNew": false
   }
 ]

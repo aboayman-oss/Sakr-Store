@@ -239,7 +239,7 @@ function initMobileFilterSheet() {
 let products = []; // Cache for product data
 
 let currentSearchTerm = ''; // New: For live search
-let currentCategoryFilter = 'All'; // New: Default to showing all products
+let currentCategoryFilter = 'Featured'; // New: Default to showing featured (new) products
 let currentSortOrder = 'default'; // 'default', 'price-asc', 'price-desc'
 let currentPriceMax = null; // Max price from the slider
 
@@ -427,6 +427,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
   // 2. Filter by category or discounts
   filteredProducts = filteredProducts.filter(p => {
     if (categoryFilter === 'All') return true;
+    if (categoryFilter === 'Featured') return !!p.isNew;
     if (categoryFilter === 'Discounts') return !!p.discount;
     return p.category && p.category.toLowerCase() === categoryFilter.toLowerCase();
   });
@@ -461,9 +462,14 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     } else {
       priceHtml = `<span class="product-price no-break">EGP ${(Number(p.price) || 0).toFixed(2)}</span>`;
     }
+    
+    // Add "New" badge if product is new
+    const newBadge = p.isNew ? '<span class="new-badge">New</span>' : '';
+    
     card.innerHTML = `
       <a href="product.html?id=${p.id}" class="product-link product-card-link" aria-label="${p.name || 'View product'}">
         <div class="product-media">
+          ${newBadge}
           <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
         <h3>${p.name || 'Untitled'}</h3>
@@ -640,8 +646,8 @@ async function initMainPage() {
       await fetchProducts(); // Populate the global 'products' array
     
       // Populate categories sidebar
-      // Build categories: All, Discounts, then the rest
-      const categories = ['All', 'Discounts'];
+      // Build categories: Featured (for new products), All, Discounts, then the rest
+      const categories = ['Featured', 'All', 'Discounts'];
       const categorySet = new Set();
       products.forEach(p => {
         if (p.category) {
@@ -670,6 +676,7 @@ async function initMainPage() {
 
         const relevantProducts = products.filter(p => {
           if (currentCategoryFilter === 'All') return true;
+          if (currentCategoryFilter === 'Featured') return !!p.isNew;
           if (currentCategoryFilter === 'Discounts') return !!p.discount;
           return p.category && p.category.toLowerCase() === currentCategoryFilter.toLowerCase();
         });

@@ -159,6 +159,17 @@
 
               document.getElementById('product-title').textContent = product.name;
               
+              // Add "New" badge if product is new
+              const productInfoSection = document.querySelector('.product-info');
+              if (product.isNew && productInfoSection) {
+                const newBadge = document.createElement('span');
+                newBadge.className = 'product-detail-new-badge';
+                newBadge.textContent = 'New';
+                // Insert badge before the title
+                const titleElement = document.getElementById('product-title');
+                productInfoSection.insertBefore(newBadge, titleElement);
+              }
+              
               // Display stock status
               const stockStatus = document.getElementById('stock-status');
               const stock = product.stock || 0;
@@ -237,9 +248,14 @@
                     ? `<span class="product-original-price">EGP ${relatedProduct.price.toFixed(2)}</span> <span class="product-discounted-price">EGP ${relatedProduct.discountedPrice.toFixed(2)}</span>`
                     : `EGP ${relatedProduct.price.toFixed(2)}`;
                   
+                  const newBadge = relatedProduct.isNew ? '<span class="new-badge">New</span>' : '';
+                  
                   card.innerHTML = `
                     <a href="product.html?id=${relatedProduct.id}" class="product-link">
-                      <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
+                      <div class="product-media">
+                        ${newBadge}
+                        <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
+                      </div>
                       <h3 class="product-name">${relatedProduct.name}</h3>
                       <p class="product-price">${priceHTML}</p>
                     </a>
