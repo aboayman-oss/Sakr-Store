@@ -648,7 +648,7 @@ button:active,
   box-shadow: 0 0 0 0.0625em var(--primary-color);
   background-color: var(--button-bg);
   z-index: 1;
-  color: var(--primary-color);
+  color: var(--button-text);
 }
 label span {
   display: block;
