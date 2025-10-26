@@ -204,7 +204,7 @@ function clearCart() {
  * @param {number} maxLength - The maximum length of the text.
  * @returns {string} The truncated text with ellipsis if needed.
  */
-function truncateText(text, maxLength = 2000) {
+function truncateText(text, maxLength = 20) {
   if (!text) return '';
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength).trim() + '...';
