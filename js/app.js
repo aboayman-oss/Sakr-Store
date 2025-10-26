@@ -199,6 +199,18 @@ function clearCart() {
 // --- Product & UI Rendering ---
 
 /**
+ * Truncates text to a maximum length and adds ellipsis if needed.
+ * @param {string} text - The text to truncate.
+ * @param {number} maxLength - The maximum length of the text.
+ * @returns {string} The truncated text with ellipsis if needed.
+ */
+function truncateText(text, maxLength = 2000) {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+}
+
+/**
  * Fetches products from the server.
  * @returns {Promise<Array<object>>} A promise that resolves to the products array.
  */
@@ -284,7 +296,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
           <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
         <h3>${p.name || 'Untitled'}</h3>
-        <p class="product-desc">${p.description || ''}</p>
+        <p class="product-desc">${truncateText(p.description, 150)}</p>
       </a>
       <div class="product-card-footer">
         <div class="product-price-block vertical-price-block">${priceHtml}</div>

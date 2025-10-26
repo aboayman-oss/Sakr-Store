@@ -211,6 +211,7 @@ body.lb-open { overflow: hidden; }
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  min-height: 300px; /* Set a minimum height for uniformity */
   min-height: 100%; /* ensure column fills card to allow bottom anchoring */
 }
 
@@ -233,9 +234,10 @@ body.lb-open { overflow: hidden; }
 
 .product-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Change to row for horizontal alignment */
+  align-items: center; /* Center items vertically */
   gap: var(--space-md);
-  margin-top: auto; /* push actions and following badges to the bottom */
+  margin-top: auto; /* Keep this to push actions to the bottom */
 }
 
 .product-actions .CartBtn {
