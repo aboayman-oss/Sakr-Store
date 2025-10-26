@@ -11,14 +11,14 @@
 /* Discount price styles */
 .product-original-price {
   text-decoration: line-through;
-  color: #888;
+  color: #555; /* Change to a darker grey for better contrast */
   font-size: 1rem;
   margin-right: 0.5em;
 }
 .product-discounted-price {
   color: #e53935;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.5rem; /* Increase font size for prominence */
 }
 .product-price-block {
   margin-top: 0.5rem;
@@ -221,6 +221,11 @@ body.lb-open { overflow: hidden; }
   margin: 0;
 }
 
+.product-name {
+  font-weight: 600; /* Increase font weight */
+  font-size: 1.2rem; /* Adjust font size */
+}
+
 .product-price {
   font-size: 1.5rem;
   font-weight: 600;
@@ -228,6 +233,8 @@ body.lb-open { overflow: hidden; }
 }
 
 .product-description {
+  font-weight: 400; /* Adjust font weight */
+  font-size: 1rem; /* Adjust font size */
   color: var(--secondary-text);
   line-height: 1.6;
 }
@@ -771,7 +778,8 @@ nav a:hover {
 }
 
 .product-description {
-  font-size: 0.875rem;
+  font-weight: 400; /* Adjust font weight */
+  font-size: 1rem; /* Adjust font size */
   color: var(--secondary-text);
   margin-bottom: var(--space-md);
 }
