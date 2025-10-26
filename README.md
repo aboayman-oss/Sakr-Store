@@ -69,9 +69,7 @@ Notes:
 
 ## Automated screenshots (no Node.js)
 
-Two ways to generate desktop and mobile screenshots:
-
-### 1) Python + Playwright (recommended)
+### Python + Playwright (recommended)
 
 This captures full-page screenshots and spins up a temporary local server so `products.json` loads correctly.
 
@@ -88,32 +86,7 @@ python .\capture_screenshots.py --out screenshots/auto
 python .\capture_screenshots.py --pages index.html product.html --out screenshots/auto
 ```
 
-Outputs are saved as full-page PNGs under scheme and device folders:
-
-- `screenshots/auto/light/desktop`
-- `screenshots/auto/light/mobile`
-- `screenshots/auto/dark/desktop`
-- `screenshots/auto/dark/mobile`
-
-By default, both light and dark are captured. To limit schemes:
-
-```powershell
-python .\capture_screenshots.py --schemes light --out screenshots/auto
-python .\capture_screenshots.py --schemes dark --out screenshots/auto
-```
-
-### 2) PowerShell + Edge/Chrome headless (simple, viewport only)
-
-This variant uses Microsoft Edge/Chrome headless directly and does not require Python, but may be less reliable across browser versions and captures only the viewport. It follows your system/browser theme and does not explicitly force light/dark.
-
-```powershell
-# Allow running the script for this session and capture defaults (index, product, cart)
-PowerShell -ExecutionPolicy Bypass -File .\capture-screenshots.ps1
-
-# Options
-PowerShell -ExecutionPolicy Bypass -File .\capture-screenshots.ps1 -Pages index.html, product.html
-PowerShell -ExecutionPolicy Bypass -File .\capture-screenshots.ps1 -Overwrite
-PowerShell -ExecutionPolicy Bypass -File .\capture-screenshots.ps1 -BrowserPath "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+Outputs are saved in `screenshots/auto/desktop` and `screenshots/auto/mobile` as full-page PNGs.
 ```
 
 Notes:
