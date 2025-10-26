@@ -11,12 +11,13 @@
 /* Discount price styles */
 .product-original-price {
   text-decoration: line-through;
-  color: #555; /* Change to a darker grey for better contrast */
+  color: var(--price-original);
   font-size: 1rem;
   margin-right: 0.5em;
+  opacity: 0.6;
 }
 .product-discounted-price {
-  color: #e53935;
+  color: var(--price-discount);
   font-weight: 700;
   font-size: 1.5rem; /* Increase font size for prominence */
 }
@@ -41,6 +42,11 @@
   --primary-color: #3b82f6;
   --primary-text: #ffffff;
   --secondary-text: #475569;
+  
+  /* Price Colors */
+  --price-regular: #0f766e; /* Teal for regular prices */
+  --price-discount: #dc2626; /* Strong red for discounts */
+  --price-original: #64748b; /* Muted slate for crossed-out prices */
   
   /* Spacing System */
   --space-xs: 0.25rem;
@@ -229,7 +235,7 @@ body.lb-open { overflow: hidden; }
 .product-price {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--price-regular);
 }
 
 .product-description {
@@ -330,6 +336,11 @@ body.lb-open { overflow: hidden; }
   --primary-color: #3b82f6;
   --primary-text: #ffffff;
   --secondary-text: #cbd5e1;
+
+  /* Price Colors - Dark Mode */
+  --price-regular: #14b8a6; /* Brighter teal for dark mode visibility */
+  --price-discount: #f87171; /* Softer red for dark mode */
+  --price-original: #94a3b8; /* Lighter slate for dark mode */
 
   /* Dark mode specific shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
@@ -773,7 +784,7 @@ nav a:hover {
 .product-price {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--price-regular);
   margin-bottom: var(--space-sm);
 }
 
