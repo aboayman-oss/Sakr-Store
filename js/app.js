@@ -100,7 +100,7 @@ function initMobileFilterSheet() {
   const applyBtn = document.getElementById('apply-filters-btn');
   const mobileSortRadios = document.querySelectorAll('input[name="mobile-sort-radio"]');
   const mobilePriceSlider = document.getElementById('mobile-price-slider');
-  const mobilePriceValue = document.getElementById('mobile-price-value');
+  const mobilePriceInput = document.getElementById('mobile-price-input');
 
   if (!filterBtn || !filterSheet || !filterOverlay) return;
 
@@ -118,10 +118,11 @@ function initMobileFilterSheet() {
       radio.checked = radio.value === currentSortOrder;
     });
 
-    if (mobilePriceSlider && mobilePriceValue) {
+    if (mobilePriceSlider && mobilePriceInput) {
       const maxPrice = mobilePriceSlider.max;
-      mobilePriceSlider.value = currentPriceMax !== null ? currentPriceMax : maxPrice;
-      mobilePriceValue.textContent = mobilePriceSlider.value;
+      const value = currentPriceMax !== null ? currentPriceMax : maxPrice;
+      mobilePriceSlider.value = value;
+      mobilePriceInput.value = value;
     }
 
     // Show sheet with animation
@@ -150,10 +151,10 @@ function initMobileFilterSheet() {
     }
 
     const desktopPriceSlider = document.getElementById('price-slider');
-    const desktopPriceValue = document.getElementById('price-range-value');
-    if (desktopPriceSlider && desktopPriceValue) {
+    const desktopPriceInput = document.getElementById('price-range-input');
+    if (desktopPriceSlider && desktopPriceInput) {
       desktopPriceSlider.value = currentPriceMax;
-      desktopPriceValue.textContent = currentPriceMax;
+      desktopPriceInput.value = currentPriceMax;
     }
 
     // Render products with new filters
@@ -191,12 +192,27 @@ function initMobileFilterSheet() {
     });
   });
 
-  // Price slider change
-  if (mobilePriceSlider && mobilePriceValue) {
+  // Price slider change - sync with input
+  if (mobilePriceSlider && mobilePriceInput) {
     mobilePriceSlider.addEventListener('input', (e) => {
       const value = Number(e.target.value);
       tempPriceMax = value;
-      mobilePriceValue.textContent = value;
+      mobilePriceInput.value = value;
+    });
+    
+    // Price input change - sync with slider
+    mobilePriceInput.addEventListener('input', (e) => {
+      let value = Number(e.target.value);
+      const min = Number(mobilePriceSlider.min);
+      const max = Number(mobilePriceSlider.max);
+      
+      // Clamp value between min and max
+      if (value < min) value = min;
+      if (value > max) value = max;
+      
+      tempPriceMax = value;
+      mobilePriceSlider.value = value;
+      mobilePriceInput.value = value;
     });
   }
 
@@ -209,10 +225,11 @@ function initMobileFilterSheet() {
 
   // Update mobile slider when category changes
   window.updateMobilePriceSlider = function(maxPrice) {
-    if (mobilePriceSlider && mobilePriceValue) {
+    if (mobilePriceSlider && mobilePriceInput) {
       mobilePriceSlider.max = maxPrice;
       mobilePriceSlider.value = maxPrice;
-      mobilePriceValue.textContent = maxPrice;
+      mobilePriceInput.max = maxPrice;
+      mobilePriceInput.value = maxPrice;
       tempPriceMax = maxPrice;
     }
   };
@@ -613,7 +630,7 @@ async function initMainPage() {
       const categoryListEl = document.getElementById('category-list');
       const sortOptionsEl = document.getElementById('sort-options');
       const priceSliderEl = document.getElementById('price-slider');
-      const priceValueEl = document.getElementById('price-range-value');
+      const priceInputEl = document.getElementById('price-range-input');
     
       if (!productListContainer || !categoryListEl) return;
     
@@ -649,7 +666,7 @@ async function initMainPage() {
       // Function to update the price slider's range and value
       const updatePriceSlider = () => {
         // Guard clause: If slider elements don't exist, do nothing.
-        if (!priceSliderEl || !priceValueEl) return;
+        if (!priceSliderEl || !priceInputEl) return;
 
         const relevantProducts = products.filter(p => {
           if (currentCategoryFilter === 'All') return true;
@@ -661,7 +678,9 @@ async function initMainPage() {
           priceSliderEl.min = 0;
           priceSliderEl.max = 0;
           priceSliderEl.value = 0;
-          priceValueEl.textContent = '0';
+          priceInputEl.min = 0;
+          priceInputEl.max = 0;
+          priceInputEl.value = 0;
           currentPriceMax = 0;
           currentPriceMax = null; // Reset price filter
           // Update mobile slider
@@ -670,7 +689,8 @@ async function initMainPage() {
           const maxPrice = Math.ceil(Math.max(0, ...relevantProducts.map(p => Number(p.price) || 0)));
           priceSliderEl.max = maxPrice;
           priceSliderEl.value = maxPrice; // Set slider to max initially
-          priceValueEl.textContent = maxPrice;
+          priceInputEl.max = maxPrice;
+          priceInputEl.value = maxPrice;
           currentPriceMax = maxPrice; // Update state
           // Update mobile slider
           if (window.updateMobilePriceSlider) window.updateMobilePriceSlider(maxPrice);
@@ -736,15 +756,32 @@ async function initMainPage() {
         });
       }
 
-      // Event listener for price slider
-      if (priceSliderEl && priceValueEl) {
+      // Event listener for price slider - sync with input
+      if (priceSliderEl && priceInputEl) {
         priceSliderEl.addEventListener('input', (e) => {
           const value = Number(e.target.value);
           currentPriceMax = value;
-          priceValueEl.textContent = value;
-          // No need to call render immediately, use 'change' for that to avoid too many re-renders
+          priceInputEl.value = value;
         });
         priceSliderEl.addEventListener('change', () => {
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
+        });
+        
+        // Event listener for price input - sync with slider
+        priceInputEl.addEventListener('input', (e) => {
+          let value = Number(e.target.value);
+          const min = Number(priceSliderEl.min);
+          const max = Number(priceSliderEl.max);
+          
+          // Clamp value between min and max
+          if (value < min) value = min;
+          if (value > max) value = max;
+          
+          currentPriceMax = value;
+          priceSliderEl.value = value;
+          priceInputEl.value = value;
+        });
+        priceInputEl.addEventListener('change', () => {
           renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
         });
       }
