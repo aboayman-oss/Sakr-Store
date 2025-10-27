@@ -623,9 +623,10 @@ async function renderCart(container, totalSpan) {
 /**
  * Shows a modern slide-in notification card with improved logic and animations.
  * Ensures only one notification is shown at a time and handles proper cleanup.
- * @param {string} message The message to display (product ID).
+ * @param {string|number} message The message to display (product ID or "productId added to cart").
+ * @param {object} productData Optional product object to use instead of fetching.
  */
-function showToast(message) {
+async function showToast(message, productData = null) {
   // Remove any existing notifications first
   const existingToasts = document.querySelectorAll('.notification-card');
   existingToasts.forEach(toast => {
@@ -635,8 +636,25 @@ function showToast(message) {
   });
   
   // Find the product details
-  const productId = parseInt(message.split(' ')[0]);
-  const product = products.find(p => p.id === productId);
+  const productId = parseInt(String(message).split(' ')[0]);
+  let product = productData;
+  
+  // If product data not provided, try to find it from the global products array
+  if (!product) {
+    if (typeof products !== 'undefined' && products.length > 0) {
+      product = products.find(p => p.id === productId);
+    } else {
+      // Fetch products if not available
+      try {
+        const response = await fetch('products.json');
+        const allProducts = await response.json();
+        product = allProducts.find(p => p.id === productId);
+      } catch (error) {
+        console.error('Error fetching product for notification:', error);
+        return;
+      }
+    }
+  }
   
   if (!product) {
     console.warn('Product not found for notification');

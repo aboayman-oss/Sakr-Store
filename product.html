@@ -305,28 +305,36 @@
             .then(products => {
               const product = products.find(p => p.id === productId);
               if (!product) {
-                showToast('Product not found');
+                alert('Product not found');
                 return;
               }
               
               if (product.stock !== undefined && product.stock === 0) {
-                showToast('This product is out of stock');
+                alert('This product is out of stock');
                 return;
               }
               
-              if (product.stock !== undefined && quantity > product.stock) {
-                showToast(`Only ${product.stock} available in stock`);
+              const cart = getCart();
+              const currentQty = cart.get(String(productId)) || 0;
+              
+              if (product.stock !== undefined && (currentQty + quantity) > product.stock) {
+                alert(`Cannot add ${quantity} items. Only ${product.stock - currentQty} more available in stock.`);
                 return;
               }
               
-              // Add to cart
-              for (let i = 0; i < quantity; i++) {
-                addToCart(productId); // Use the app.js addToCart function
-              }
+              // Add to cart - add quantity at once then show single notification
+              const cartMap = getCart();
+              const key = String(productId);
+              cartMap.set(key, currentQty + quantity);
+              saveCart(cartMap);
+              updateCartCounter();
+              
+              // Show notification with the product data
+              showToast(productId + ' added to cart', product);
             })
             .catch(error => {
               console.error('Error checking stock:', error);
-              showToast('Error adding to cart');
+              alert('Error adding to cart');
             });
         });
         // Lightbox logic
