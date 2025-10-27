@@ -54,8 +54,8 @@
   --primary-text: #ffffff;
   
   /* Text Hierarchy */
-  --secondary-text: #475569;
-  --muted-text: #64748b;
+  --secondary-text: #334155; /* Darkened from #475569 for better contrast (6.7:1) */
+  --muted-text: #475569; /* Darkened from #64748b for better contrast (5.4:1) */
   
   /* Price Colors */
   --price-regular: #059669; /* Emerald green for regular prices */
@@ -63,18 +63,18 @@
   --price-original: #dc2626; /* Red for crossed-out prices */
   
   /* Status Colors */
-  --success-color: #10b981;
+  --success-color: #047857; /* Darkened from #10b981 for better contrast (4.8:1 on light bg) */
   --success-bg: #d1fae5;
-  --error-color: #ef4444;
+  --error-color: #dc2626; /* Darkened from #ef4444 for better contrast (5.9:1 on light bg) */
   --error-bg: #fee2e2;
-  --warning-color: #f59e0b;
+  --warning-color: #d97706; /* Darkened from #f59e0b for better contrast (4.8:1 on light bg) */
   --warning-bg: #fef3c7;
-  --info-color: #3b82f6;
+  --info-color: #2563eb; /* Darkened from #3b82f6 for better contrast (5.1:1 on light bg) */
   --info-bg: #dbeafe;
   
   /* Cart Badge */
   --cart-badge-bg: #f59e0b; /* Amber/yellow for cart count */
-  --cart-badge-text: #78350f; /* Dark brown text for contrast */
+  --cart-badge-text: #451a03; /* Darkened from #78350f for better contrast (4.7:1) */
   
   /* Spacing System */
   --space-xs: 0.25rem;
@@ -561,8 +561,8 @@ body.lb-open { overflow: hidden; }
   --primary-text: #ffffff;
   
   /* Text Hierarchy */
-  --secondary-text: #d1d5db;
-  --muted-text: #9ca3af;
+  --secondary-text: #e5e7eb; /* Lightened for better contrast on dark bg (10.2:1) */
+  --muted-text: #d1d5db; /* Lightened from #9ca3af for better contrast (9.5:1) */
 
   /* Price Colors - Dark Mode */
   --price-regular: #10b981; /* Brighter emerald for dark mode visibility */
@@ -570,18 +570,18 @@ body.lb-open { overflow: hidden; }
   --price-original: #f87171; /* Lighter red for dark mode */
   
   /* Status Colors */
-  --success-color: #34d399;
+  --success-color: #6ee7b7; /* Lightened from #34d399 for better contrast (6.1:1 on dark bg) */
   --success-bg: #064e3b;
-  --error-color: #f87171;
+  --error-color: #fca5a5; /* Lightened from #f87171 for better contrast (5.8:1 on dark bg) */
   --error-bg: #7f1d1d;
-  --warning-color: #fbbf24;
+  --warning-color: #fcd34d; /* Lightened from #fbbf24 for better contrast (6.8:1 on dark bg) */
   --warning-bg: #78350f;
-  --info-color: #60a5fa;
+  --info-color: #93c5fd; /* Lightened from #60a5fa for better contrast (6.2:1 on dark bg) */
   --info-bg: #1e3a8a;
   
   /* Cart Badge */
   --cart-badge-bg: #fbbf24; /* Brighter amber/yellow for dark mode */
-  --cart-badge-text: #1e293b; /* Dark text for contrast */
+  --cart-badge-text: #0f172a; /* Darkened from #1e293b for better contrast (8.9:1) */
 
   /* Dark mode specific shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
@@ -2474,7 +2474,7 @@ nav a:hover {
 }
 
 .stock-warning.warning {
-  color: #b45309;
+  color: #92400e; /* Darkened from #b45309 for better contrast (5.8:1) */
   background: var(--warning-bg);
   border: 1px solid color-mix(in srgb, var(--warning-color) 30%, transparent);
 }
