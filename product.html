@@ -298,9 +298,36 @@
         
         addToCartBtn.addEventListener('click', () => {
           const quantity = parseInt(quantityInput.value);
-          for (let i = 0; i < quantity; i++) {
-            addToCart(productId); // Use the app.js addToCart function
-          }
+          
+          // Fetch product and check stock again before adding
+          fetch('products.json')
+            .then(response => response.json())
+            .then(products => {
+              const product = products.find(p => p.id === productId);
+              if (!product) {
+                showToast('Product not found');
+                return;
+              }
+              
+              if (product.stock !== undefined && product.stock === 0) {
+                showToast('This product is out of stock');
+                return;
+              }
+              
+              if (product.stock !== undefined && quantity > product.stock) {
+                showToast(`Only ${product.stock} available in stock`);
+                return;
+              }
+              
+              // Add to cart
+              for (let i = 0; i < quantity; i++) {
+                addToCart(productId); // Use the app.js addToCart function
+              }
+            })
+            .catch(error => {
+              console.error('Error checking stock:', error);
+              showToast('Error adding to cart');
+            });
         });
         // Lightbox logic
         const lightbox = document.getElementById('lightbox');
