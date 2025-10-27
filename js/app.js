@@ -647,7 +647,11 @@ async function renderCart(container, totalSpan) {
     if (product.discount) {
       unitPrice = Number(product.discountedPrice) || 0;
       itemTotal = unitPrice * qty;
-      priceDisplay = `EGP ${unitPrice.toFixed(2)}`;
+      const originalPrice = Number(product.price) || 0;
+      priceDisplay = `
+        <span class="cart-item-original-price">EGP ${originalPrice.toFixed(2)}</span>
+        <span class="cart-item-discounted-price">EGP ${unitPrice.toFixed(2)}</span>
+      `;
     } else {
       unitPrice = Number(product.price) || 0;
       itemTotal = unitPrice * qty;
@@ -683,6 +687,9 @@ async function renderCart(container, totalSpan) {
     const nameLang = getLanguageCode(product.name);
     const nameDir = getTextDirection(product.name);
     
+    // Add discount badge if product has discount
+    const discountBadge = product.discount ? '<span class="cart-discount-badge">Sale</span>' : '';
+    
     // Set direction on the cart item itself for proper RTL layout
     if (nameDir === 'rtl') {
       itemEl.setAttribute('dir', 'rtl');
@@ -691,6 +698,7 @@ async function renderCart(container, totalSpan) {
     itemEl.innerHTML = `
       <div class="cart-item-image">
         <img src="${productImage}" alt="${product.name}" loading="lazy">
+        ${discountBadge}
       </div>
       <div class="cart-item-info">
         <h3 class="cart-item-name" lang="${nameLang}" dir="${nameDir}">${product.name}</h3>
