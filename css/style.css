@@ -166,11 +166,22 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .lightbox.open {
@@ -179,49 +190,78 @@
 
 .lightbox img {
   max-width: 90vw;
-  max-height: 80vh;
+  max-height: 85vh;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .lightbox-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
-  font-size: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all var(--transition-speed) var(--transition-ease);
+  font-weight: 300;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
 }
 
 .lightbox-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  font-size: 1.5rem;
+  font-weight: 300;
+  transition: all var(--transition-speed) var(--transition-ease);
 }
 
-.lightbox-nav.prev { left: 16px; }
-.lightbox-nav.next { right: 16px; }
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-nav.prev { left: 24px; }
+.lightbox-nav.next { right: 24px; }
 
 /* Prevent background scroll when lightbox is open */
 body.lb-open { overflow: hidden; }
@@ -3181,14 +3221,20 @@ nav a:hover {
   .breadcrumb {
     font-size: 0.8125rem;
     padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-lg);
   }
   
   .breadcrumb ol {
     gap: 0.25rem;
   }
   
+  .breadcrumb a {
+    padding: 0.125rem 0.25rem;
+  }
+  
   .breadcrumb li:not(:last-child)::after {
     margin-left: 0.25rem;
+    font-size: 1rem;
   }
   
   .trust-badges {
@@ -3201,7 +3247,10 @@ nav a:hover {
     flex-direction: row;
     justify-content: flex-start;
     text-align: left;
-    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
   }
   
   .trust-badge i {
@@ -3211,8 +3260,12 @@ nav a:hover {
   }
   
   .related-products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
+  }
+  
+  .related-products-section h2 {
+    font-size: 1.5rem;
   }
   
   .related-products-grid .product-img {
@@ -3225,12 +3278,8 @@ nav a:hover {
   }
   
   .related-products-grid .product-price {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     padding: 0 var(--space-md) var(--space-md);
-  }
-  
-  .related-products-section h2 {
-    font-size: 1.5rem;
   }
 }
 
@@ -3292,5 +3341,90 @@ nav a:hover {
   
   header h1 {
     font-size: 1.25rem;
+  }
+  
+  /* Product page optimizations for extra small screens */
+  .product-detail-page {
+    padding: var(--space-md) var(--space-sm);
+  }
+  
+  .product-container {
+    padding: var(--space-lg);
+    border-radius: 12px;
+  }
+  
+  .product-image {
+    height: 320px;
+  }
+  
+  .thumbnail-btn {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .product-info h1 {
+    font-size: 1.5rem;
+  }
+  
+  .product-price {
+    font-size: 1.5rem;
+  }
+  
+  .product-description {
+    font-size: 0.9375rem;
+  }
+  
+  .breadcrumb {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+  
+  .trust-badges {
+    padding: var(--space-md);
+  }
+  
+  .trust-badge {
+    padding: var(--space-sm);
+  }
+  
+  .trust-badge i {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  .trust-badge span {
+    font-size: 0.875rem;
+  }
+  
+  .related-products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .related-products-grid .product-img {
+    height: 240px;
+  }
+  
+  .related-products-section {
+    margin-top: 2rem;
+  }
+  
+  .quantity-selector {
+    padding: 0.125rem;
+  }
+  
+  .quantity-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  #quantity {
+    width: 50px;
+    font-size: 1rem;
+  }
+  
+  .product-actions .CartBtn {
+    height: 50px;
+    font-size: 1rem;
   }
 }
