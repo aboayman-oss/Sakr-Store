@@ -76,7 +76,7 @@
       <div class="product-container">
         <div class="product-media-column">
           <div class="product-image">
-            <img src="" alt="" id="product-image">
+            <img src="" alt="" id="product-image" loading="lazy">
           </div>
           <div class="product-thumbnails" id="product-thumbnails" aria-label="More product images"></div>
         </div>
@@ -320,6 +320,7 @@
                     const img = document.createElement('img');
                     img.src = src;
                     img.alt = product.name ? `${product.name} - image ${idx + 1}` : `Image ${idx + 1}`;
+                    img.loading = 'lazy';
                     btn.appendChild(img);
                     btn.addEventListener('click', () => {
                       mainImgEl.src = src;
@@ -366,7 +367,7 @@
                       <div class="product-media">
                         ${newBadge}
                         ${saleBadge}
-                        <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
+                        <img src="${primary}" alt="${relatedProduct.name}" class="product-img" loading="lazy">
                       </div>
                       <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${relatedProduct.name}</h3>
                       <p class="product-price">${priceHTML}</p>

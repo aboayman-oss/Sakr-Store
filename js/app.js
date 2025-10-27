@@ -5,6 +5,51 @@ const config = {
   whatsappNumber: '201024496178',
 };
 
+// --- Image Helper Functions ---
+/**
+ * Generates responsive image HTML with WebP/AVIF support and fallback
+ * @param {string} src - The image source path (JPG/PNG)
+ * @param {string} alt - Alt text for the image
+ * @param {string} className - Optional CSS class for the img element
+ * @param {boolean} lazy - Whether to use lazy loading (default: true)
+ * @returns {string} HTML string for picture element with sources
+ */
+function generateResponsiveImage(src, alt = '', className = '', lazy = true) {
+  if (!src) return `<img src="" alt="${alt}" class="${className}" loading="${lazy ? 'lazy' : 'eager'}">`;
+  
+  // Extract file extension and path
+  const lastDot = src.lastIndexOf('.');
+  const basePath = lastDot > -1 ? src.substring(0, lastDot) : src;
+  const ext = lastDot > -1 ? src.substring(lastDot) : '';
+  
+  // Generate WebP and AVIF paths (assuming they exist or will be created)
+  const webpSrc = `${basePath}.webp`;
+  const avifSrc = `${basePath}.avif`;
+  
+  const loadingAttr = lazy ? 'loading="lazy"' : '';
+  
+  return `
+    <picture>
+      <source srcset="${avifSrc}" type="image/avif">
+      <source srcset="${webpSrc}" type="image/webp">
+      <img src="${src}" alt="${alt}" class="${className}" ${loadingAttr}>
+    </picture>
+  `.trim();
+}
+
+/**
+ * Creates a simple img element with lazy loading
+ * @param {string} src - The image source path
+ * @param {string} alt - Alt text for the image
+ * @param {string} className - Optional CSS class
+ * @param {boolean} lazy - Whether to use lazy loading (default: true)
+ * @returns {string} HTML string for img element
+ */
+function generateSimpleImage(src, alt = '', className = '', lazy = true) {
+  const loadingAttr = lazy ? 'loading="lazy"' : '';
+  return `<img src="${src}" alt="${alt}" class="${className}" ${loadingAttr}>`;
+}
+
 // --- Arabic Language Detection ---
 /**
  * Detects if text contains Arabic characters
@@ -683,7 +728,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
         <div class="product-media">
           ${newBadge}
           ${saleBadge}
-          <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
+          ${generateSimpleImage(getPrimaryImage(p), p.name || 'Product image', '', true)}
         </div>
         <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${p.name || 'Untitled'}</h3>
         <p class="product-desc product-description" lang="${descLang}" dir="${descDir}">${truncateText(p.description)}</p>
@@ -806,7 +851,7 @@ async function renderCart(container, totalSpan) {
     
     itemEl.innerHTML = `
       <div class="cart-item-image">
-        <img src="${productImage}" alt="${product.name}" loading="lazy">
+        ${generateSimpleImage(productImage, product.name, '', true)}
         ${newBadge}
         ${discountBadge}
       </div>

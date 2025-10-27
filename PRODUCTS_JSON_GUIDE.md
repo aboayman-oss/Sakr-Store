@@ -992,6 +992,169 @@ Simply change the `stock` value:
 
 ---
 
+## Performance Optimizations & Image Handling
+
+### Lazy Loading (Active)
+
+**No Changes Required to products.json**
+
+All images referenced in `products.json` are automatically optimized with lazy loading. The implementation:
+
+- ✅ Reads existing image paths from `products.json`
+- ✅ Automatically adds `loading="lazy"` attribute when rendering
+- ✅ Works with both legacy `image` field and new `images.primary/gallery` structure
+- ✅ No configuration needed - it just works!
+
+**Example:** Your JSON stays exactly the same:
+```json
+{
+  "id": 1,
+  "name": "Product Name",
+  "image": "images/product1.jpg",
+  "images": {
+    "primary": "images/product1.jpg",
+    "gallery": ["images/product1-alt.jpg"]
+  }
+}
+```
+
+The system automatically converts this to lazy-loaded images when displaying on the website.
+
+### WebP/AVIF Modern Image Formats (Optional)
+
+**No Changes Required to products.json**
+
+The store includes infrastructure for modern image formats (WebP/AVIF) that provides 50-70% smaller file sizes.
+
+#### How It Works
+
+1. **Keep your current image references** - Don't change anything in `products.json`
+2. **Add converted images alongside originals** - Use the conversion scripts
+3. **Browsers automatically choose the best format**
+
+#### File Structure
+
+Your `products.json` continues to reference the original image:
+```json
+{
+  "image": "images/product1.jpg"
+}
+```
+
+Your file system has all versions:
+```
+images/
+  product1.jpg       ← Referenced in products.json (fallback)
+  product1.webp      ← Automatically used by modern browsers
+  product1.avif      ← Automatically used by newest browsers
+```
+
+#### The Magic
+
+When the store renders this product, it generates:
+```html
+<picture>
+  <source srcset="images/product1.avif" type="image/avif">
+  <source srcset="images/product1.webp" type="image/webp">
+  <img src="images/product1.jpg" alt="Product Name" loading="lazy">
+</picture>
+```
+
+Browsers choose the best format they support:
+- **Newest browsers** (Chrome 85+, Safari 16+): Use AVIF (smallest files)
+- **Modern browsers** (all recent versions): Use WebP (small files)
+- **Older browsers**: Use JPG/PNG (original)
+
+#### Converting Images
+
+Use the provided scripts to convert your images:
+
+**PowerShell (Windows):**
+```powershell
+.\convert-images.ps1
+```
+
+**Node.js (All platforms):**
+```bash
+npm install
+npm run convert
+```
+
+These scripts automatically:
+- Find all JPG/PNG images in your `images/` folder
+- Create `.webp` and `.avif` versions alongside them
+- Preserve the original files
+- **Don't require any changes to products.json**
+
+#### Image Naming Convention
+
+The system works by automatically detecting image variants:
+
+```
+Original in JSON:     images/product.jpg
+Auto-detects:         images/product.webp
+Auto-detects:         images/product.avif
+```
+
+As long as the base filename matches, the browser will find the optimized versions.
+
+#### Best Practices
+
+1. **Keep original references in products.json**
+   ```json
+   "image": "images/product1.jpg"  // ✅ Don't change this
+   ```
+
+2. **Don't reference WebP/AVIF directly**
+   ```json
+   "image": "images/product1.webp"  // ❌ Don't do this
+   ```
+
+3. **Maintain consistent naming**
+   ```
+   product1.jpg  →  product1.webp  →  product1.avif  // ✅ Same base name
+   ```
+
+4. **Both image structures work**
+   ```json
+   // Legacy - works fine
+   "image": "images/product.jpg"
+   
+   // New structure - also works fine
+   "images": {
+     "primary": "images/product.jpg",
+     "gallery": ["images/product-2.jpg", "images/product-3.jpg"]
+   }
+   ```
+
+#### Migration Path
+
+**Phase 1: Lazy Loading (Already Active)**
+- No action needed
+- Already working with existing images
+
+**Phase 2: Modern Formats (Optional)**
+1. Run conversion script on your images folder
+2. Test in different browsers
+3. Deploy - no JSON changes needed!
+
+**Phase 3: Enable in Code (Optional)**
+- Update 2 function calls in `js/app.js`
+- From `generateSimpleImage()` to `generateResponsiveImage()`
+- See `QUICK_START.md` for exact locations
+
+### Summary: products.json Changes
+
+| Feature | Changes to products.json | Action Required |
+|---------|-------------------------|-----------------|
+| Lazy Loading | ✅ None | None - already active |
+| WebP/AVIF Support | ✅ None | Optional: Convert images |
+| Both Systems | ✅ None | Keep using JPG/PNG references |
+
+**Bottom Line:** Your `products.json` file requires **zero changes** for performance optimizations. The system is designed to work seamlessly with your existing data structure.
+
+---
+
 ## Summary
 
 The `products.json` file is the **heart of the Sakr Store**. Every parameter serves a specific purpose in the store's functionality:
@@ -1011,4 +1174,4 @@ The `products.json` file is the **heart of the Sakr Store**. Every parameter ser
 | `stock` | Inventory | Availability, validation |
 | `isNew` | Featured flag | Badges, Featured filter |
 
-**Key Takeaway:** Maintain data integrity in this file - all store functionality depends on it being properly structured and up-to-date.
+**Key Takeaway:** Maintain data integrity in this file - all store functionality depends on it being properly structured and up-to-date. Performance optimizations work transparently without requiring any changes to your product data.
