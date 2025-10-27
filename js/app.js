@@ -621,19 +621,48 @@ async function renderCart(container, totalSpan) {
 }
 
 /**
- * Shows a modern slide-in notification card.
- * @param {string} message The message to display.
+ * Shows a modern slide-in notification card with improved logic and animations.
+ * Ensures only one notification is shown at a time and handles proper cleanup.
+ * @param {string} message The message to display (product ID).
  */
 function showToast(message) {
-  const product = products.find(p => p.id === parseInt(message.split(' ')[0]));
+  // Remove any existing notifications first
+  const existingToasts = document.querySelectorAll('.notification-card');
+  existingToasts.forEach(toast => {
+    if (toast.parentElement) {
+      toast.remove();
+    }
+  });
   
+  // Find the product details
+  const productId = parseInt(message.split(' ')[0]);
+  const product = products.find(p => p.id === productId);
+  
+  if (!product) {
+    console.warn('Product not found for notification');
+    return;
+  }
+  
+  // Create notification element
   const toast = document.createElement('div');
   toast.className = 'notification-card';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  
+  // Format price display
+  let priceDisplay = '';
+  if (product.discount && product.discountedPrice) {
+    // Use the pre-calculated discounted price from the product data
+    priceDisplay = `EGP ${(Number(product.discountedPrice) || 0).toFixed(2)}`;
+  } else {
+    priceDisplay = `EGP ${(Number(product.price) || 0).toFixed(2)}`;
+  }
+  
   toast.innerHTML = `
     <div class="notification-wrapper">
       <div class="notification-icon">
         <div class="icon-cart-box">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 576 512">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 576 512">
             <path fill="currentColor" d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path>
           </svg>
         </div>
@@ -642,17 +671,17 @@ function showToast(message) {
       <div class="notification-content">
         <div class="notification-title-wrapper">
           <span class="notification-title">Added to cart!</span>
-          <span class="notification-close">
+          <button class="notification-close" aria-label="Close notification">
             <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 384 512">
               <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
             </svg>
-          </span>
+          </button>
         </div>
-        <div class="notification-product">${product ? product.name : 'Product'}</div>
-        <div class="notification-price">${product ? `EGP ${product.price.toFixed(2)}` : ''}</div>
-        <button class="notification-button" onclick="window.location.href='cart.html'">
+        <div class="notification-product">${product.name}</div>
+        <div class="notification-price">${priceDisplay}</div>
+        <button class="notification-button" type="button">
           View cart
-          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
             <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" clip-rule="evenodd"></path>
           </svg>
         </button>
@@ -660,28 +689,74 @@ function showToast(message) {
     </div>
   `;
   
+  // Append to body
   document.body.appendChild(toast);
-
-  // Function to handle notification dismissal with animation
+  
+  // Dismiss function with cleanup
   const dismissNotification = () => {
+    if (!toast.parentElement) return; // Already removed
+    
     toast.classList.add('slideOut');
-    toast.addEventListener('animationend', () => {
-      if (document.body.contains(toast)) {
+    
+    // Remove after animation completes
+    const handleAnimationEnd = () => {
+      toast.removeEventListener('animationend', handleAnimationEnd);
+      if (toast.parentElement) {
         toast.remove();
       }
-    });
+    };
+    
+    toast.addEventListener('animationend', handleAnimationEnd);
+    
+    // Fallback timeout in case animation doesn't fire
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.remove();
+      }
+    }, 500);
   };
 
-  // Set up close button functionality
+  // Close button handler
   const closeBtn = toast.querySelector('.notification-close');
-  closeBtn.addEventListener('click', dismissNotification);
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismissNotification();
+    });
+  }
+  
+  // View cart button handler
+  const viewCartBtn = toast.querySelector('.notification-button');
+  if (viewCartBtn) {
+    viewCartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'cart.html';
+    });
+  }
 
-  // Remove after 5 seconds if not closed manually
-  setTimeout(() => {
-    if (document.body.contains(toast)) {
+  // Auto-dismiss after 5 seconds
+  const autoDismissTimer = setTimeout(() => {
+    if (toast.parentElement) {
       dismissNotification();
     }
   }, 5000);
+  
+  // Clear timer if manually closed
+  toast.addEventListener('click', (e) => {
+    if (e.target.closest('.notification-close') || e.target.closest('.notification-button')) {
+      clearTimeout(autoDismissTimer);
+    }
+  });
+  
+  // Dismiss on escape key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape' && toast.parentElement) {
+      dismissNotification();
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  
+  document.addEventListener('keydown', handleEscape);
 }
 
 /**
