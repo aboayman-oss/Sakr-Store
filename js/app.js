@@ -1005,6 +1005,15 @@ async function initMainPage() {
           categoryListEl.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
           target.classList.add('active');
     
+          // Update breadcrumb on index page
+          const breadcrumbCategory = document.getElementById('breadcrumb-category');
+          if (breadcrumbCategory) {
+            breadcrumbCategory.textContent = selectedCategory === 'All' ? 'All Products' : 
+                                              selectedCategory === 'Featured' ? 'Featured Products' :
+                                              selectedCategory === 'Discounts' ? 'Special Discounts' :
+                                              selectedCategory;
+          }
+
           // Update slider and re-render products
           updatePriceSlider();
           renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
