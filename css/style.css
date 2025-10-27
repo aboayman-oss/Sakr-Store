@@ -2241,8 +2241,10 @@ nav a:hover {
   height: 160px;
   border-radius: 10px;
   overflow: hidden;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary-color) 3%, transparent) 0%, 
+    color-mix(in srgb, var(--card-bg) 100%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--card-border) 40%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4663,7 +4665,7 @@ nav a:hover {
 .related-products-grid .product-img {
   width: 100%;
   height: 280px;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.3s var(--transition-ease);
 }
 
