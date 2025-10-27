@@ -689,7 +689,8 @@ async function renderCart(container, totalSpan) {
     const nameLang = getLanguageCode(product.name);
     const nameDir = getTextDirection(product.name);
     
-    // Add discount badge if product has discount
+    // Add badges for "New" and "Sale" - they can coexist
+    const newBadge = product.isNew ? '<span class="cart-new-badge">New</span>' : '';
     const discountBadge = product.discount ? '<span class="cart-discount-badge">Sale</span>' : '';
     
     // Set direction on the cart item itself for proper RTL layout
@@ -700,6 +701,7 @@ async function renderCart(container, totalSpan) {
     itemEl.innerHTML = `
       <div class="cart-item-image">
         <img src="${productImage}" alt="${product.name}" loading="lazy">
+        ${newBadge}
         ${discountBadge}
       </div>
       <div class="cart-item-info">
