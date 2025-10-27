@@ -9,6 +9,55 @@ https://aboayman-oss.github.io/Sakr-Store/
 - Add products to cart
 - View cart
 - Multiple images per product with a primary image and gallery (product page thumbnails)
+- **Full Arabic language support** with modern typography
+- **Bidirectional text support** for mixed Arabic/English content
+- Automatic text direction detection (RTL/LTR)
+
+## Arabic Language Support
+
+The store now includes comprehensive Arabic language support with modern, professional typography:
+
+### Features
+
+- **Modern Arabic Fonts**: Uses Cairo and Tajawal fonts for beautiful Arabic typography
+- **Automatic Detection**: Text direction (RTL/LTR) is automatically detected based on content
+- **Mixed Content**: Seamlessly handles products with Arabic names, English descriptions, or any combination
+- **Bidirectional Support**: Proper rendering of Arabic text mixed with English words or numbers
+- **Consistent Styling**: Maintains the same modern design whether content is in Arabic or English
+
+### How to Use
+
+Simply add products in Arabic to your `products.json` file:
+
+```json
+{
+  "id": 3,
+  "name": "حقيبة توت كبيرة من كانفاس القطنية الثقيلة",
+  "price": 19.99,
+  "description": "حقيبة توت كبيرة متعددة الاستخدامات مصنوعة من قماش القطن الثقيل، مثالية للتسوق أو الاستخدام اليومي.",
+  "category": "Accessories",
+  "discount": true,
+  "discountedPrice": 14.99
+}
+```
+
+You can also mix Arabic and English:
+
+```json
+{
+  "id": 4,
+  "name": "Premium T-Shirt - قميص مميز",
+  "description": "High quality cotton shirt with modern design - قميص قطني عالي الجودة",
+  "category": "Apparel"
+}
+```
+
+### Typography
+
+- **Arabic Text**: Rendered with Cairo and Tajawal fonts for optimal readability
+- **English Text**: Rendered with Inter font for modern, clean appearance
+- **Numbers & Prices**: Always displayed LTR for consistency
+- **Line Height**: Optimized separately for Arabic (1.7) and English (1.5) for best readability
 
 ## Tech Stack
 

@@ -688,6 +688,45 @@ body {
               color var(--transition-speed) var(--transition-ease);
 }
 
+/* Arabic Typography Support */
+/* Automatically use Cairo font for Arabic text while keeping Inter for English */
+body {
+  font-family: 'Inter', 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+}
+
+/* Bidirectional text support - automatically detect and apply RTL for Arabic content */
+[lang="ar"],
+*:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Auto-detect Arabic text and apply proper styling */
+/* This uses CSS unicode-range to automatically style Arabic characters */
+@supports (font-family: 'Cairo') {
+  /* Arabic Unicode ranges: Arabic, Arabic Supplement, Arabic Extended-A */
+  *:has(> :first-child:is(:lang(ar))) {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+  }
+}
+
+/* Ensure proper rendering for mixed content (Arabic + English) */
+.product-name,
+.product-description,
+h1, h2, h3, h4, h5, h6,
+p, span, div, li, a, button, input, textarea {
+  /* Allow browser to detect text direction automatically */
+  unicode-bidi: plaintext;
+}
+
+/* Specific handling for product cards with mixed content */
+.product-card .product-name,
+.product-card .product-description {
+  text-align: start; /* Use logical property for bidirectional support */
+  direction: auto; /* Let browser detect direction */
+}
+
 /* Modern Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
@@ -4517,4 +4556,173 @@ nav a:hover {
     height: 50px;
     font-size: 1rem;
   }
+}
+
+/* ========================================
+   ARABIC LANGUAGE SUPPORT
+   ======================================== */
+
+/* Enhanced Arabic Typography */
+/* Improve letter spacing and line height for Arabic text */
+:lang(ar) {
+  letter-spacing: 0;
+  word-spacing: 0.05em;
+  line-height: 1.7; /* Better for Arabic script */
+}
+
+/* Arabic headings - slightly larger line height */
+h1:lang(ar), h2:lang(ar), h3:lang(ar), 
+h4:lang(ar), h5:lang(ar), h6:lang(ar) {
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* Product cards with Arabic content */
+.product-card:has(.product-name:lang(ar)) .product-name,
+.product-card:has([dir="rtl"]) .product-name {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.product-card:has(.product-description:lang(ar)) .product-description,
+.product-card:has([dir="rtl"]) .product-description {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  line-height: 1.7;
+}
+
+/* Price formatting remains LTR even in Arabic context */
+.product-price,
+.product-original-price,
+.product-discounted-price,
+.cart-item-price,
+.total-price {
+  direction: ltr;
+  unicode-bidi: embed;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Numbers in Arabic context - use Western Arabic numerals */
+.product-price:lang(ar),
+.product-original-price:lang(ar),
+.product-discounted-price:lang(ar) {
+  font-family: 'Inter', sans-serif;
+  font-feature-settings: 'tnum' 1; /* Tabular numbers */
+}
+
+/* Search and input fields - support both directions */
+input[type="search"],
+input[type="text"],
+textarea {
+  direction: auto; /* Auto-detect based on first character */
+  text-align: start;
+}
+
+input[type="search"]:lang(ar),
+input[type="text"]:lang(ar),
+textarea:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+}
+
+/* Buttons with Arabic text */
+button:lang(ar),
+.CartBtn:lang(ar),
+.apply-filters-btn:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Category labels and navigation */
+.category-item:lang(ar),
+.filter-title:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 600;
+}
+
+/* Cart items with Arabic product names */
+.cart-item-name:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* Breadcrumbs - maintain LTR for navigation arrows */
+.breadcrumb {
+  direction: ltr;
+  text-align: left;
+}
+
+.breadcrumb a:lang(ar),
+.breadcrumb span:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  direction: rtl;
+  display: inline-block;
+}
+
+/* Icons should not flip direction */
+i, .icon, svg {
+  direction: ltr;
+}
+
+/* Ensure proper alignment for mixed content */
+.product-card {
+  text-align: start;
+}
+
+/* RTL adjustments for product cards */
+[dir="rtl"] .product-card,
+.product-card:has([dir="rtl"]) {
+  text-align: right;
+}
+
+[dir="rtl"] .product-badge {
+  right: auto;
+  left: 0.75rem;
+}
+
+/* Mixed language support - Arabic with English or numbers */
+.mixed-content {
+  direction: auto;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+
+/* Optimize font rendering for Arabic */
+@supports (font-variant-ligatures: common-ligatures) {
+  :lang(ar) {
+    font-variant-ligatures: common-ligatures;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Responsive Arabic typography */
+@media (max-width: 768px) {
+  :lang(ar) {
+    line-height: 1.65;
+  }
+  
+  h1:lang(ar) { font-size: 1.75rem; }
+  h2:lang(ar) { font-size: 1.5rem; }
+  h3:lang(ar) { font-size: 1.25rem; }
+}
+
+/* Product detail page Arabic support */
+.product-detail-name:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.product-detail-description:lang(ar) {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  line-height: 1.8;
+}
+
+/* Ensure smooth transitions maintain quality */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

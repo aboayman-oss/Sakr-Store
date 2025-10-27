@@ -5,6 +5,37 @@ const config = {
   whatsappNumber: '201024496178',
 };
 
+// --- Arabic Language Detection ---
+/**
+ * Detects if text contains Arabic characters
+ * @param {string} text - Text to check
+ * @returns {boolean} True if text contains Arabic characters
+ */
+function hasArabic(text) {
+  if (!text) return false;
+  // Arabic Unicode range: \u0600-\u06FF (Arabic), \u0750-\u077F (Arabic Supplement)
+  const arabicRegex = /[\u0600-\u06FF\u0750-\u077F]/;
+  return arabicRegex.test(text);
+}
+
+/**
+ * Gets the text direction based on content
+ * @param {string} text - Text to analyze
+ * @returns {string} 'rtl' for Arabic, 'ltr' otherwise
+ */
+function getTextDirection(text) {
+  return hasArabic(text) ? 'rtl' : 'ltr';
+}
+
+/**
+ * Gets the language code based on content
+ * @param {string} text - Text to analyze
+ * @returns {string} 'ar' for Arabic, 'en' otherwise
+ */
+function getLanguageCode(text) {
+  return hasArabic(text) ? 'ar' : 'en';
+}
+
 // --- Mobile Menu Management ---
 function initMobileMenu() {
   const menuToggle = document.getElementById('menu-toggle');
@@ -510,6 +541,13 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
   filteredProducts.forEach(p => {
     const card = document.createElement('article');
     card.className = 'product-card';
+    
+    // Detect language for product name and description
+    const nameLang = getLanguageCode(p.name);
+    const nameDir = getTextDirection(p.name);
+    const descLang = getLanguageCode(p.description);
+    const descDir = getTextDirection(p.description);
+    
     let priceHtml = '';
     if (p.discount) {
       priceHtml = `
@@ -539,8 +577,8 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
           ${newBadge}
           <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
-        <h3>${p.name || 'Untitled'}</h3>
-        <p class="product-desc">${truncateText(p.description)}</p>
+        <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${p.name || 'Untitled'}</h3>
+        <p class="product-desc product-description" lang="${descLang}" dir="${descDir}">${truncateText(p.description)}</p>
       </a>
       <div class="product-card-footer">
         <div class="product-price-block vertical-price-block">${priceHtml}</div>
@@ -640,12 +678,17 @@ async function renderCart(container, totalSpan) {
 
     const itemEl = document.createElement('div');
     itemEl.className = 'cart-item';
+    
+    // Detect language for product name
+    const nameLang = getLanguageCode(product.name);
+    const nameDir = getTextDirection(product.name);
+    
     itemEl.innerHTML = `
       <div class="cart-item-image">
         <img src="${productImage}" alt="${product.name}" loading="lazy">
       </div>
       <div class="cart-item-info">
-        <h3 class="cart-item-name">${product.name}</h3>
+        <h3 class="cart-item-name" lang="${nameLang}" dir="${nameDir}">${product.name}</h3>
         <p class="cart-item-price">${priceDisplay}</p>
         ${stockWarning}
       </div>
@@ -882,6 +925,13 @@ async function initMainPage() {
         const button = document.createElement('button');
         button.textContent = category;
         button.setAttribute('data-category', category);
+        
+        // Add language attributes for Arabic categories
+        if (hasArabic(category)) {
+          button.setAttribute('lang', 'ar');
+          button.setAttribute('dir', 'rtl');
+        }
+        
         if (category === currentCategoryFilter) {
           button.classList.add('active');
         }

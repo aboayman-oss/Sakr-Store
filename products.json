@@ -39,9 +39,9 @@
   },
   {
     "id": 3,
-    "name": "Canvas Tote Bag",
+    "name": "حقيبة توت كبيرة من كانفاس القطنية الثقيلة",
     "price": 19.99,
-    "description": "Engineered to be the ultimate carry-all, this tote bag combines rugged, heavy-duty 18 oz. premium cotton canvas with a cavernous, easy-access interior. Its durability is reinforced with bar-tack stitching on the wide-weave straps and a double-layered bottom panel, ensuring it can handle a heavy load without tearing. The spacious main compartment, expanded by a generous bottom gusset, is large enough to effortlessly hold a 15-inch laptop, a jacket, and bulky items, while a deep internal zippered pocket keeps valuables secure and external slip pockets offer quick access to essentials like a water bottle or umbrella.",
+    "description": "حقيبة توت كبيرة متعددة الاستخدامات مصنوعة من قماش القطن الثقيل، مثالية للتسوق أو الاستخدام اليومي.",
     "image": "images/tote.jpg",
     "images": {
       "primary": "images/tote.jpg",
@@ -53,7 +53,7 @@
     "category": "Accessories",
     "discount": true,
     "discountedPrice": 14.99,
-    "stock": 0,
+    "stock": 10,
     "isNew": true
   },
   {

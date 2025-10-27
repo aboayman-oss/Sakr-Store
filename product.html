@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Details - Sakr Store</title>
+    <!-- Modern fonts: Inter for English/Latin, Cairo for Arabic -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="css/style.css">
   </head>
@@ -209,7 +211,14 @@
                 if (currentImages.length > 0) openLightbox(currentImageIndex);
               });
 
-              document.getElementById('product-title').textContent = product.name;
+              const productTitle = document.getElementById('product-title');
+              productTitle.textContent = product.name;
+              
+              // Add language attributes for Arabic support
+              if (hasArabic(product.name)) {
+                productTitle.setAttribute('lang', 'ar');
+                productTitle.setAttribute('dir', 'rtl');
+              }
               
               // Add "New" badge if product is new
               const productInfoSection = document.querySelector('.product-info');
@@ -248,7 +257,15 @@
               } else {
                 document.getElementById('product-price').textContent = `EGP ${product.price.toFixed(2)}`;
               }
-              document.getElementById('product-description').textContent = product.description || '';
+              
+              const productDesc = document.getElementById('product-description');
+              productDesc.textContent = product.description || '';
+              
+              // Add language attributes for Arabic support in description
+              if (hasArabic(product.description)) {
+                productDesc.setAttribute('lang', 'ar');
+                productDesc.setAttribute('dir', 'rtl');
+              }
 
               // Update breadcrumb
               const breadcrumbCategory = document.getElementById('breadcrumb-category');
@@ -309,13 +326,17 @@
                   
                   const newBadge = relatedProduct.isNew ? '<span class="new-badge">New</span>' : '';
                   
+                  // Detect language for product name
+                  const nameLang = getLanguageCode(relatedProduct.name);
+                  const nameDir = getTextDirection(relatedProduct.name);
+                  
                   card.innerHTML = `
                     <a href="product.html?id=${relatedProduct.id}" class="product-link">
                       <div class="product-media">
                         ${newBadge}
                         <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
                       </div>
-                      <h3 class="product-name">${relatedProduct.name}</h3>
+                      <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${relatedProduct.name}</h3>
                       <p class="product-price">${priceHTML}</p>
                     </a>
                   `;
