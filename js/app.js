@@ -683,6 +683,11 @@ async function renderCart(container, totalSpan) {
     const nameLang = getLanguageCode(product.name);
     const nameDir = getTextDirection(product.name);
     
+    // Set direction on the cart item itself for proper RTL layout
+    if (nameDir === 'rtl') {
+      itemEl.setAttribute('dir', 'rtl');
+    }
+    
     itemEl.innerHTML = `
       <div class="cart-item-image">
         <img src="${productImage}" alt="${product.name}" loading="lazy">

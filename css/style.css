@@ -2780,12 +2780,20 @@ nav a:hover {
   .cart-item-info {
     grid-column: 2;
     grid-row: 1;
-    padding-right: 0;
+    padding-right: 3rem; /* Add padding to prevent overlap with delete button */
   }
 
   .cart-item-name {
     font-size: 1rem;
     line-height: 1.3;
+    /* Prevent text overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
   }
 
   .cart-item-price {
@@ -2816,9 +2824,18 @@ nav a:hover {
     position: absolute;
     top: 1rem;
     right: 1rem;
+    inset-inline-end: 1rem; /* Use logical property for RTL support */
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  /* Override for RTL cart items */
+  .cart-item[dir="rtl"] .cart-item-remove {
+    right: auto;
+    left: 1rem;
+    inset-inline-end: auto;
+    inset-inline-start: 1rem;
   }
 
   .remove-item {
@@ -4706,6 +4723,37 @@ i, .icon, svg {
   h1:lang(ar) { font-size: 1.75rem; }
   h2:lang(ar) { font-size: 1.5rem; }
   h3:lang(ar) { font-size: 1.25rem; }
+  
+  /* Fix cart item overlap with delete button on mobile for all languages */
+  .cart-item-info {
+    /* Ensure there's always space for the delete button on both sides */
+    padding-inline-end: 3rem !important;
+  }
+  
+  /* Fix cart item name overlap with delete button on mobile for RTL */
+  .cart-item-name[lang="ar"],
+  .cart-item-name[dir="rtl"] {
+    max-width: 100%; /* Ensure text doesn't overflow into button area */
+  }
+  
+  /* RTL-specific cart item info padding - use logical properties */
+  [dir="rtl"] .cart-item-info {
+    padding-inline-start: 3rem !important;
+    padding-inline-end: 0 !important;
+  }
+  
+  /* Adjust delete button position for RTL */
+  [dir="rtl"] .cart-item-remove {
+    right: auto;
+    left: 1rem; /* Position on left for RTL */
+  }
+  
+  /* Fallback for browsers without :has() support */
+  .cart-item-name[lang="ar"] ~ .cart-item-remove,
+  .cart-item-name[dir="rtl"] ~ .cart-item-remove {
+    right: auto;
+    left: 1rem;
+  }
 }
 
 /* Product detail page Arabic support */
