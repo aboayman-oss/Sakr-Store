@@ -622,13 +622,19 @@ async function renderCart(container, totalSpan) {
 
     // Check stock status
     let stockWarning = '';
+    let canIncrease = true;
+    let canDecrease = qty > 1;
+    
     if (product.stock !== undefined) {
+      canIncrease = qty < product.stock;
+      
       if (qty > product.stock) {
         stockWarning = `<p class="stock-warning error">⚠️ Only ${product.stock} available</p>`;
       } else if (product.stock <= 5 && product.stock > 0) {
         stockWarning = `<p class="stock-warning warning">⚠️ Only ${product.stock} left in stock</p>`;
       } else if (product.stock === 0) {
         stockWarning = `<p class="stock-warning out-of-stock">⛔ Out of stock</p>`;
+        canIncrease = false;
       }
     }
 
@@ -644,9 +650,9 @@ async function renderCart(container, totalSpan) {
         ${stockWarning}
       </div>
       <div class="cart-item-quantity">
-        <button class="quantity-change" data-id="${id}" data-change="-1" aria-label="Decrease quantity">−</button>
+        <button class="quantity-change" data-id="${id}" data-change="-1" aria-label="Decrease quantity" ${!canDecrease ? 'disabled' : ''}>−</button>
         <span class="cart-item-qty">${qty}</span>
-        <button class="quantity-change" data-id="${id}" data-change="1" aria-label="Increase quantity">+</button>
+        <button class="quantity-change" data-id="${id}" data-change="1" aria-label="Increase quantity" ${!canIncrease ? 'disabled' : ''}>+</button>
       </div>
       <div class="cart-item-remove">
         <button class="remove-item" data-id="${id}" aria-label="Remove item">

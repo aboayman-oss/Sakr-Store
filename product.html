@@ -125,16 +125,62 @@
         const decreaseBtn = document.getElementById('decrease-quantity');
         const increaseBtn = document.getElementById('increase-quantity');
         
+        let maxAvailableStock = Infinity; // Will be set when product loads
+        
+        // Update quantity controls based on available stock
+        function updateQuantityControls() {
+          const currentValue = parseInt(quantityInput.value) || 1;
+          const cart = getCart();
+          const cartQty = cart.get(String(productId)) || 0;
+          const remainingStock = maxAvailableStock - cartQty;
+          
+          // Disable decrease if at minimum
+          decreaseBtn.disabled = currentValue <= 1;
+          
+          // Disable increase if at maximum available stock
+          increaseBtn.disabled = currentValue >= remainingStock;
+          
+          // Update input max attribute
+          quantityInput.max = remainingStock;
+          
+          // Ensure current value doesn't exceed available stock
+          if (currentValue > remainingStock) {
+            quantityInput.value = remainingStock;
+          }
+        }
+        
         decreaseBtn.addEventListener('click', () => {
           const currentValue = parseInt(quantityInput.value);
           if (currentValue > 1) {
             quantityInput.value = currentValue - 1;
+            updateQuantityControls();
           }
         });
         
         increaseBtn.addEventListener('click', () => {
           const currentValue = parseInt(quantityInput.value);
-          quantityInput.value = currentValue + 1;
+          const cart = getCart();
+          const cartQty = cart.get(String(productId)) || 0;
+          const remainingStock = maxAvailableStock - cartQty;
+          
+          if (currentValue < remainingStock) {
+            quantityInput.value = currentValue + 1;
+            updateQuantityControls();
+          }
+        });
+        
+        // Validate input on change
+        quantityInput.addEventListener('input', () => {
+          const cart = getCart();
+          const cartQty = cart.get(String(productId)) || 0;
+          const remainingStock = maxAvailableStock - cartQty;
+          let value = parseInt(quantityInput.value) || 1;
+          
+          if (value < 1) value = 1;
+          if (value > remainingStock) value = remainingStock;
+          
+          quantityInput.value = value;
+          updateQuantityControls();
         });
 
         // Load and display product details
@@ -179,6 +225,10 @@
               // Display stock status
               const stockStatus = document.getElementById('stock-status');
               const stock = product.stock || 0;
+              
+              // Set max available stock for quantity controls
+              maxAvailableStock = stock;
+              
               if (stock > 10) {
                 stockStatus.innerHTML = '<i class="ri-checkbox-circle-line"></i> In Stock';
                 stockStatus.className = 'stock-status in-stock';
@@ -189,6 +239,9 @@
                 stockStatus.innerHTML = '<i class="ri-close-circle-line"></i> Sold Out';
                 stockStatus.className = 'stock-status out-of-stock';
               }
+              
+              // Initialize quantity controls with stock limits
+              updateQuantityControls();
               
               if (product.discount) {
                 document.getElementById('product-price').innerHTML = `<span class='product-original-price'>EGP ${product.price.toFixed(2)}</span> <span class='product-discounted-price'>EGP ${product.discountedPrice.toFixed(2)}</span>`;
@@ -300,18 +353,16 @@
                 addToCartBtn.classList.add('disabled');
                 addToCartBtn.querySelector('.text').textContent = 'Out of Stock';
                 quantityInput.disabled = true;
+                decreaseBtn.disabled = true;
+                increaseBtn.disabled = true;
               } else {
                 addToCartBtn.disabled = false;
                 addToCartBtn.classList.remove('disabled');
                 addToCartBtn.querySelector('.text').textContent = 'Add to Cart';
                 quantityInput.disabled = false;
                 
-                // Update max quantity input based on remaining stock
-                const remainingStock = product.stock - cartQty;
-                quantityInput.max = remainingStock;
-                if (parseInt(quantityInput.value) > remainingStock) {
-                  quantityInput.value = remainingStock;
-                }
+                // Update quantity controls
+                updateQuantityControls();
               }
             });
         }
