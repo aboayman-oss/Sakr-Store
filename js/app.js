@@ -500,15 +500,32 @@ async function renderCart(container, totalSpan) {
   const cart = getCart();
   const allProducts = await fetchProducts();
 
+  // Get empty cart state element
+  const emptyCartState = document.getElementById('empty-cart-state');
+  const subtotalSpan = document.getElementById('subtotal-price');
+  const orderForm = document.getElementById('customer-form');
+  const orderSummary = document.querySelector('.order-summary');
+
   // Empty cart state
-  const emptyCartActions = document.getElementById('empty-cart-actions');
   if (cart.size === 0) {
-    container.innerHTML = '<p>Your cart is empty.</p>';
-    if (emptyCartActions) emptyCartActions.style.display = 'block';
+    container.innerHTML = '';
+    if (emptyCartState) {
+      emptyCartState.style.display = 'flex';
+    }
     if (totalSpan) totalSpan.textContent = '0.00';
+    if (subtotalSpan) subtotalSpan.textContent = 'EGP 0.00';
+    
+    // Hide order form when cart is empty
+    if (orderForm) orderForm.style.display = 'none';
+    if (orderSummary) orderSummary.style.opacity = '0.6';
+    
     return;
   } else {
-    if (emptyCartActions) emptyCartActions.style.display = 'none';
+    if (emptyCartState) {
+      emptyCartState.style.display = 'none';
+    }
+    if (orderForm) orderForm.style.display = 'block';
+    if (orderSummary) orderSummary.style.opacity = '1';
   }
 
   container.innerHTML = ''; // Clear previous content
@@ -519,32 +536,49 @@ async function renderCart(container, totalSpan) {
     if (!product) continue;
 
     let itemTotal = 0;
-    let priceHtml = '';
+    let priceDisplay = '';
+    let unitPrice = 0;
+    
     if (product.discount) {
-      itemTotal = (Number(product.discountedPrice) || 0) * qty;
-      priceHtml = `<span class='product-original-price'>EGP ${(Number(product.price) || 0).toFixed(2)}</span> <span class='product-discounted-price'>EGP ${(Number(product.discountedPrice) || 0).toFixed(2)}</span> x ${qty} = <span class='product-discounted-price'>EGP ${itemTotal.toFixed(2)}</span>`;
+      unitPrice = Number(product.discountedPrice) || 0;
+      itemTotal = unitPrice * qty;
+      priceDisplay = `EGP ${unitPrice.toFixed(2)}`;
     } else {
-      itemTotal = (Number(product.price) || 0) * qty;
-      priceHtml = `EGP ${((Number(product.price) || 0).toFixed(2))} x ${qty} = EGP ${itemTotal.toFixed(2)}`;
+      unitPrice = Number(product.price) || 0;
+      itemTotal = unitPrice * qty;
+      priceDisplay = `EGP ${unitPrice.toFixed(2)}`;
     }
     total += itemTotal;
+
+    // Get product image
+    const productImage = product.images && product.images.length > 0 
+      ? `images/${product.images[0]}` 
+      : 'images/placeholder.jpg';
 
     const itemEl = document.createElement('div');
     itemEl.className = 'cart-item';
     itemEl.innerHTML = `
-      <span><strong>${product.name}</strong></span>
-      <span>
-        <button class="quantity-change" data-id="${id}" data-change="-1">-</button>
-        ${qty}
-        <button class="quantity-change" data-id="${id}" data-change="1">+</button>
-      </span>
-      <span>${priceHtml}</span>
-      <button class="remove-item" data-id="${id}">&times;</button>
+      <div class="cart-item-image">
+        <img src="${productImage}" alt="${product.name}" loading="lazy">
+      </div>
+      <div class="cart-item-info">
+        <h3 class="cart-item-name">${product.name}</h3>
+        <p class="cart-item-price">${priceDisplay}</p>
+      </div>
+      <div class="cart-item-quantity">
+        <button class="quantity-change" data-id="${id}" data-change="-1" aria-label="Decrease quantity">−</button>
+        <span class="cart-item-qty">${qty}</span>
+        <button class="quantity-change" data-id="${id}" data-change="1" aria-label="Increase quantity">+</button>
+      </div>
+      <div class="cart-item-remove">
+        <button class="remove-item" data-id="${id}" aria-label="Remove item">×</button>
+      </div>
     `;
     container.appendChild(itemEl);
   }
 
   if (totalSpan) totalSpan.textContent = total.toFixed(2);
+  if (subtotalSpan) subtotalSpan.textContent = `EGP ${total.toFixed(2)}`;
 }
 
 /**
