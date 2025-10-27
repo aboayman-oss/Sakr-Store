@@ -50,23 +50,6 @@ A modern, high-performance e-commerce platform for electronics and accessories w
 
 ---
 
-## 📸 Screenshots
-
-<details>
-<summary>View Screenshots</summary>
-
-### Light Mode
-![Desktop Light](screenshots/auto/light/desktop/index.html.png)
-![Mobile Light](screenshots/auto/light/mobile/index.html.png)
-
-### Dark Mode
-![Desktop Dark](screenshots/auto/dark/desktop/index.html.png)
-![Mobile Dark](screenshots/auto/dark/mobile/index.html.png)
-
-</details>
-
----
-
 ## 🚀 Quick Start
 
 ### Prerequisites
