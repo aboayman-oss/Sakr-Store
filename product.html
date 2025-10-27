@@ -220,15 +220,23 @@
                 productTitle.setAttribute('dir', 'rtl');
               }
               
+              // Add badges for "New" and "Sale" - they can coexist
+              const productImageContainer = document.querySelector('.product-image');
+              
               // Add "New" badge if product is new
-              const productInfoSection = document.querySelector('.product-info');
-              if (product.isNew && productInfoSection) {
+              if (product.isNew && productImageContainer) {
                 const newBadge = document.createElement('span');
                 newBadge.className = 'product-detail-new-badge';
                 newBadge.textContent = 'New';
-                // Insert badge before the title
-                const titleElement = document.getElementById('product-title');
-                productInfoSection.insertBefore(newBadge, titleElement);
+                productImageContainer.appendChild(newBadge);
+              }
+              
+              // Add "Sale" badge if product has discount
+              if (product.discount && productImageContainer) {
+                const saleBadge = document.createElement('span');
+                saleBadge.className = 'product-detail-sale-badge';
+                saleBadge.textContent = 'Sale';
+                productImageContainer.appendChild(saleBadge);
               }
               
               // Display stock status
@@ -325,6 +333,7 @@
                     : `EGP ${relatedProduct.price.toFixed(2)}`;
                   
                   const newBadge = relatedProduct.isNew ? '<span class="new-badge">New</span>' : '';
+                  const saleBadge = relatedProduct.discount ? '<span class="sale-badge">Sale</span>' : '';
                   
                   // Detect language for product name
                   const nameLang = getLanguageCode(relatedProduct.name);
@@ -334,6 +343,7 @@
                     <a href="product.html?id=${relatedProduct.id}" class="product-link">
                       <div class="product-media">
                         ${newBadge}
+                        ${saleBadge}
                         <img src="${primary}" alt="${relatedProduct.name}" class="product-img">
                       </div>
                       <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${relatedProduct.name}</h3>

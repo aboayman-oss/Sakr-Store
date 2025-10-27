@@ -558,8 +558,9 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
       priceHtml = `<span class="product-price no-break">EGP ${(Number(p.price) || 0).toFixed(2)}</span>`;
     }
     
-    // Add "New" badge if product is new
+    // Add badges for "New" and "Sale" - they can coexist
     const newBadge = p.isNew ? '<span class="new-badge">New</span>' : '';
+    const saleBadge = p.discount ? '<span class="sale-badge">Sale</span>' : '';
     
     // Check current cart quantity for this product
     const cart = getCart();
@@ -575,6 +576,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
       <a href="product.html?id=${p.id}" class="product-link product-card-link" aria-label="${p.name || 'View product'}">
         <div class="product-media">
           ${newBadge}
+          ${saleBadge}
           <img src="${getPrimaryImage(p)}" alt="${p.name || 'Product image'}" loading="lazy">
         </div>
         <h3 class="product-name" lang="${nameLang}" dir="${nameDir}">${p.name || 'Untitled'}</h3>
