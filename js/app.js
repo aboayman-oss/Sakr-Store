@@ -900,13 +900,21 @@ async function initCartPage() {
 
   cartContainer.addEventListener('click', async (e) => {
     const target = e.target;
-    const productId = target.getAttribute('data-id');
-
-    if (target.matches('.remove-item')) {
+    
+    // Handle remove button - check if clicked element or its parent is the remove button
+    const removeBtn = target.closest('.remove-item');
+    if (removeBtn) {
+      const productId = removeBtn.getAttribute('data-id');
       removeFromCart(productId);
       renderCart(cartContainer, totalSpan); // Re-render
-    } else if (target.matches('.quantity-change')) {
-      const change = parseInt(target.getAttribute('data-change'), 10);
+      return;
+    }
+    
+    // Handle quantity change buttons
+    const quantityBtn = target.closest('.quantity-change');
+    if (quantityBtn) {
+      const productId = quantityBtn.getAttribute('data-id');
+      const change = parseInt(quantityBtn.getAttribute('data-change'), 10);
       const cart = getCart();
       const currentQty = cart.get(productId) || 0;
       const newQty = currentQty + change;

@@ -2163,8 +2163,8 @@ nav a:hover {
 }
 
 .remove-item {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   color: var(--error-color);
@@ -2174,21 +2174,49 @@ nav a:hover {
   justify-content: center;
   transition: all var(--transition-speed) var(--transition-ease);
   padding: 0;
+  border-radius: 8px;
+  position: relative;
+}
+
+.remove-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--error-bg);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity var(--transition-speed) var(--transition-ease);
 }
 
 .remove-item svg {
-  width: 100%;
-  height: 100%;
+  width: 20px;
+  height: 20px;
   stroke: currentColor;
+  stroke-width: 2.5;
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-speed) var(--transition-ease);
 }
 
 .remove-item:hover {
   color: #dc2626;
-  transform: scale(1.15);
+  transform: scale(1.1);
+}
+
+.remove-item:hover::before {
+  opacity: 1;
+}
+
+.remove-item:hover svg {
+  stroke-width: 3;
 }
 
 .remove-item:active {
-  transform: scale(0.95) rotate(90deg);
+  transform: scale(0.95);
+}
+
+.remove-item:active svg {
+  transform: rotate(15deg);
 }
 
 /* Empty Cart State */
