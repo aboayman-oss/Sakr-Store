@@ -345,6 +345,42 @@ function addToCart(productId) {
   // Show the modern notification card
   showToast(productId + ' added to cart');
   updateCartCounter();
+  
+  // Update button state after adding to cart
+  updateAddToCartButton(productId, currentQty + 1);
+}
+
+/**
+ * Updates the add to cart button state based on stock availability.
+ * @param {string | number} productId - The ID of the product.
+ * @param {number} cartQty - Current quantity in cart.
+ */
+function updateAddToCartButton(productId, cartQty) {
+  const product = products.find(p => p.id === parseInt(productId));
+  if (!product || product.stock === undefined) return;
+  
+  // Find all buttons for this product
+  const buttons = document.querySelectorAll(`.add-to-cart[data-product-id="${productId}"]`);
+  
+  buttons.forEach(button => {
+    const textElement = button.querySelector('.text');
+    
+    if (cartQty >= product.stock) {
+      // Disable button when cart quantity equals or exceeds stock
+      button.disabled = true;
+      button.classList.add('disabled');
+      if (textElement) {
+        textElement.textContent = 'Out of Stock';
+      }
+    } else {
+      // Enable button if there's still stock available
+      button.disabled = false;
+      button.classList.remove('disabled');
+      if (textElement) {
+        textElement.textContent = 'Add to Cart';
+      }
+    }
+  });
 }
 
 /**
@@ -356,6 +392,9 @@ function removeFromCart(productId) {
   cart.delete(String(productId));
   saveCart(cart);
   updateCartCounter();
+  
+  // Re-enable the add to cart button
+  updateAddToCartButton(productId, 0);
 }
 
 /**
@@ -371,6 +410,9 @@ function updateCartQuantity(productId, quantity) {
     cart.set(String(productId), quantity);
     saveCart(cart);
     updateCartCounter();
+    
+    // Update button state
+    updateAddToCartButton(productId, quantity);
   }
 }
 
@@ -481,8 +523,12 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
     // Add "New" badge if product is new
     const newBadge = p.isNew ? '<span class="new-badge">New</span>' : '';
     
-    // Check if product is out of stock
-    const isOutOfStock = p.stock !== undefined && p.stock === 0;
+    // Check current cart quantity for this product
+    const cart = getCart();
+    const cartQty = cart.get(String(p.id)) || 0;
+    
+    // Check if product is out of stock or cart is full
+    const isOutOfStock = (p.stock !== undefined && p.stock === 0) || (p.stock !== undefined && cartQty >= p.stock);
     const buttonDisabled = isOutOfStock ? 'disabled' : '';
     const buttonClass = isOutOfStock ? 'CartBtn add-to-cart disabled' : 'CartBtn add-to-cart';
     const buttonText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';

@@ -284,17 +284,40 @@
         // Add to cart functionality
         const addToCartBtn = document.getElementById('add-to-cart');
         
-        // Check stock and disable button if needed
-        fetch('products.json')
-          .then(response => response.json())
-          .then(products => {
-            const product = products.find(p => p.id === productId);
-            if (product && product.stock === 0) {
-              addToCartBtn.disabled = true;
-              addToCartBtn.classList.add('disabled');
-              addToCartBtn.querySelector('.text').textContent = 'Out of Stock';
-            }
-          });
+        // Function to update button state based on cart quantity
+        function updateProductButtonState() {
+          fetch('products.json')
+            .then(response => response.json())
+            .then(products => {
+              const product = products.find(p => p.id === productId);
+              if (!product) return;
+              
+              const cart = getCart();
+              const cartQty = cart.get(String(productId)) || 0;
+              
+              if (product.stock !== undefined && (product.stock === 0 || cartQty >= product.stock)) {
+                addToCartBtn.disabled = true;
+                addToCartBtn.classList.add('disabled');
+                addToCartBtn.querySelector('.text').textContent = 'Out of Stock';
+                quantityInput.disabled = true;
+              } else {
+                addToCartBtn.disabled = false;
+                addToCartBtn.classList.remove('disabled');
+                addToCartBtn.querySelector('.text').textContent = 'Add to Cart';
+                quantityInput.disabled = false;
+                
+                // Update max quantity input based on remaining stock
+                const remainingStock = product.stock - cartQty;
+                quantityInput.max = remainingStock;
+                if (parseInt(quantityInput.value) > remainingStock) {
+                  quantityInput.value = remainingStock;
+                }
+              }
+            });
+        }
+        
+        // Initial button state check
+        updateProductButtonState();
         
         addToCartBtn.addEventListener('click', () => {
           const quantity = parseInt(quantityInput.value);
@@ -331,6 +354,9 @@
               
               // Show notification with the product data
               showToast(productId + ' added to cart', product);
+              
+              // Update button state after adding
+              updateProductButtonState();
             })
             .catch(error => {
               console.error('Error checking stock:', error);
