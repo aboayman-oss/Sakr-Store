@@ -1965,7 +1965,7 @@ nav a:hover {
 /* Individual Cart Item */
 .cart-item {
   display: grid;
-  grid-template-columns: 100px 1fr auto auto;
+  grid-template-columns: 140px 1fr auto auto;
   gap: 1.5rem;
   align-items: center;
   padding: 1.5rem;
@@ -2001,8 +2001,8 @@ nav a:hover {
 
 /* Cart Item Image */
 .cart-item-image {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   border-radius: 10px;
   overflow: hidden;
   background: var(--card-bg);
@@ -2012,6 +2012,7 @@ nav a:hover {
   justify-content: center;
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 .cart-item-image img {
@@ -2481,14 +2482,14 @@ nav a:hover {
   }
 
   .cart-item {
-    grid-template-columns: 80px 1fr auto auto;
-    gap: 1rem;
+    grid-template-columns: 120px 1fr auto auto;
+    gap: 1.25rem;
     padding: 1.25rem;
   }
 
   .cart-item-image {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
   }
 
   .form-group input {
@@ -2534,7 +2535,7 @@ nav a:hover {
   }
 
   .cart-item {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 100px 1fr;
     grid-template-rows: auto auto;
     gap: 1rem;
     padding: 1rem;
@@ -2542,8 +2543,8 @@ nav a:hover {
   }
 
   .cart-item-image {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     grid-row: 1 / 3;
     grid-column: 1;
   }
@@ -2551,7 +2552,7 @@ nav a:hover {
   .cart-item-info {
     grid-column: 2;
     grid-row: 1;
-    padding-right: 2.5rem;
+    padding-right: 0;
   }
 
   .cart-item-name {
@@ -2585,8 +2586,11 @@ nav a:hover {
 
   .cart-item-remove {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .remove-item {
@@ -2660,16 +2664,16 @@ nav a:hover {
   .cart-item {
     padding: 0.875rem;
     gap: 0.75rem;
-    grid-template-columns: 70px 1fr;
+    grid-template-columns: 90px 1fr;
   }
 
   .cart-item-image {
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
   }
 
   .cart-item-info {
-    padding-right: 2.25rem;
+    padding-right: 0;
   }
 
   .cart-item-name {
@@ -2702,6 +2706,15 @@ nav a:hover {
     width: 34px;
     height: 34px;
     font-size: 1.25rem;
+  }
+
+  .cart-item-remove {
+    position: absolute;
+    top: 0.875rem;
+    right: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .summary-title {
