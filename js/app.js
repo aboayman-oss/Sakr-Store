@@ -484,7 +484,113 @@ async function fetchProducts() {
     return products;
   } catch (err) {
     console.error('Failed to load products', err);
-    return []; // Return empty on error
+    throw err; // Re-throw to handle in calling code
+  }
+}
+
+/**
+ * Renders a skeleton loader while products are being fetched.
+ * @param {HTMLElement} container - The element to render into.
+ * @param {number} count - Number of skeleton cards to show.
+ */
+function renderSkeletonLoader(container, count = 6) {
+  if (!container) return;
+  
+  const loaderDiv = document.createElement('div');
+  loaderDiv.className = 'skeleton-loader';
+  loaderDiv.setAttribute('aria-label', 'Loading products');
+  
+  for (let i = 0; i < count; i++) {
+    const card = document.createElement('div');
+    card.className = 'skeleton-card';
+    card.innerHTML = `
+      <div class="skeleton-image"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text short"></div>
+      <div class="skeleton-text medium"></div>
+      <div class="skeleton-button"></div>
+    `;
+    loaderDiv.appendChild(card);
+  }
+  
+  container.innerHTML = '';
+  container.appendChild(loaderDiv);
+}
+
+/**
+ * Renders an empty state when no products match filters.
+ * @param {HTMLElement} container - The element to render into.
+ */
+function renderEmptyState(container) {
+  if (!container) return;
+  
+  const emptyDiv = document.createElement('div');
+  emptyDiv.className = 'empty-state';
+  emptyDiv.setAttribute('role', 'status');
+  emptyDiv.innerHTML = `
+    <div class="empty-state-icon">
+      <i class="ri-search-line"></i>
+    </div>
+    <h2 class="empty-state-title">No Products Found</h2>
+    <p class="empty-state-message">
+      We couldn't find any products matching your current filters or search criteria.
+    </p>
+    <div class="empty-state-suggestions">
+      <h4><i class="ri-lightbulb-line"></i> Try the following:</h4>
+      <ul>
+        <li>Clear your search or try different keywords</li>
+        <li>Select a different category</li>
+        <li>Adjust the price range filter</li>
+        <li>Browse all products by selecting "All" category</li>
+      </ul>
+    </div>
+  `;
+  
+  container.innerHTML = '';
+  container.appendChild(emptyDiv);
+}
+
+/**
+ * Renders an error state when products fail to load.
+ * @param {HTMLElement} container - The element to render into.
+ * @param {Function} retryCallback - Function to call when retry button is clicked.
+ */
+function renderErrorState(container, retryCallback) {
+  if (!container) return;
+  
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'error-state';
+  errorDiv.setAttribute('role', 'alert');
+  errorDiv.innerHTML = `
+    <div class="error-state-icon">
+      <i class="ri-error-warning-line"></i>
+    </div>
+    <h2 class="error-state-title">Oops! Something Went Wrong</h2>
+    <p class="error-state-message">
+      We're having trouble loading the products. This could be due to a network issue or server problem.
+    </p>
+    <div class="error-state-details">
+      <code>Failed to load products.json</code>
+    </div>
+    <button class="retry-button" id="retry-load-btn">
+      <i class="ri-refresh-line"></i>
+      <span>Try Again</span>
+    </button>
+  `;
+  
+  container.innerHTML = '';
+  container.appendChild(errorDiv);
+  
+  // Add retry button event listener
+  const retryBtn = errorDiv.querySelector('#retry-load-btn');
+  if (retryBtn && retryCallback) {
+    retryBtn.addEventListener('click', async () => {
+      retryBtn.classList.add('loading');
+      retryBtn.querySelector('span').textContent = 'Retrying...';
+      await retryCallback();
+      retryBtn.classList.remove('loading');
+      retryBtn.querySelector('span').textContent = 'Try Again';
+    });
   }
 }
 
@@ -534,7 +640,7 @@ function renderProducts(container, searchTerm = '', categoryFilter = 'All', sort
   // 'default' order doesn't require sorting
 
   if (filteredProducts.length === 0) {
-    container.innerHTML = `<p>No products found matching your criteria.</p>`;
+    renderEmptyState(container);
     return;
   }
 
@@ -920,42 +1026,9 @@ async function initMainPage() {
     
       if (!productListContainer || !categoryListEl) return;
     
-      // Initial loading state for products
-      productListContainer.innerHTML = '<p>Loading products...</p>';    
-    
-      await fetchProducts(); // Populate the global 'products' array
-    
-      // Populate categories sidebar
-      // Build categories: Featured, Discounts, All, then the rest
-      const categories = ['Featured', 'Discounts', 'All'];
-      const categorySet = new Set();
-      products.forEach(p => {
-        if (p.category) {
-          categorySet.add(p.category);
-        }
-      });
-      categories.push(...Array.from(categorySet));
-
-      categoryListEl.innerHTML = '';
-      categories.forEach(category => {
-        const li = document.createElement('li');
-        const button = document.createElement('button');
-        button.textContent = category;
-        button.setAttribute('data-category', category);
-        
-        // Add language attributes for Arabic categories
-        if (hasArabic(category)) {
-          button.setAttribute('lang', 'ar');
-          button.setAttribute('dir', 'rtl');
-        }
-        
-        if (category === currentCategoryFilter) {
-          button.classList.add('active');
-        }
-        li.appendChild(button);
-        categoryListEl.appendChild(li);
-      });
-    
+      // Show skeleton loader while fetching products
+      renderSkeletonLoader(productListContainer, 6);
+      
       // Function to update the price slider's range and value
       const updatePriceSlider = () => {
         // Guard clause: If slider elements don't exist, do nothing.
@@ -990,10 +1063,56 @@ async function initMainPage() {
           if (window.updateMobilePriceSlider) window.updateMobilePriceSlider(maxPrice);
         }
       };
+      
+      // Function to load products with error handling
+      const loadProducts = async () => {
+        try {
+          renderSkeletonLoader(productListContainer, 6);
+          await fetchProducts(); // Populate the global 'products' array
+          
+          // Populate categories sidebar
+          // Build categories: Featured, Discounts, All, then the rest
+          const categories = ['Featured', 'Discounts', 'All'];
+          const categorySet = new Set();
+          products.forEach(p => {
+            if (p.category) {
+              categorySet.add(p.category);
+            }
+          });
+          categories.push(...Array.from(categorySet));
 
-      // Initial setup
-      updatePriceSlider();
-      renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
+          categoryListEl.innerHTML = '';
+          categories.forEach(category => {
+            const li = document.createElement('li');
+            const button = document.createElement('button');
+            button.textContent = category;
+            button.setAttribute('data-category', category);
+            
+            // Add language attributes for Arabic categories
+            if (hasArabic(category)) {
+              button.setAttribute('lang', 'ar');
+              button.setAttribute('dir', 'rtl');
+            }
+            
+            if (category === currentCategoryFilter) {
+              button.classList.add('active');
+            }
+            li.appendChild(button);
+            categoryListEl.appendChild(li);
+          });
+          
+          // Update slider and render products
+          updatePriceSlider();
+          renderProducts(productListContainer, currentSearchTerm, currentCategoryFilter, currentSortOrder, currentPriceMax);
+          
+        } catch (err) {
+          console.error('Error loading products:', err);
+          renderErrorState(productListContainer, loadProducts);
+        }
+      };
+      
+      // Initial load
+      await loadProducts();
     
       // Event listener for category clicks
       categoryListEl.addEventListener('click', (e) => {

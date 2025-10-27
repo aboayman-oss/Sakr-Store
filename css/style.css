@@ -5141,3 +5141,350 @@ i, .icon, svg {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* --- Loading States (Skeleton Loaders) --- */
+.skeleton-loader {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+}
+
+.skeleton-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid color-mix(in srgb, var(--card-border) 30%, transparent);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(90deg, 
+    color-mix(in srgb, var(--card-border) 15%, transparent) 0%, 
+    color-mix(in srgb, var(--card-border) 25%, transparent) 50%, 
+    color-mix(in srgb, var(--card-border) 15%, transparent) 100%);
+  background-size: 200% 100%;
+  border-radius: 12px;
+  animation: skeleton-shimmer 2s ease-in-out infinite;
+}
+
+.skeleton-text {
+  height: 1rem;
+  background: linear-gradient(90deg, 
+    color-mix(in srgb, var(--card-border) 20%, transparent) 0%, 
+    color-mix(in srgb, var(--card-border) 30%, transparent) 50%, 
+    color-mix(in srgb, var(--card-border) 20%, transparent) 100%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  margin-top: 1rem;
+  animation: skeleton-shimmer 2s ease-in-out infinite;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-text.medium {
+  width: 80%;
+  margin-top: 0.5rem;
+}
+
+.skeleton-button {
+  width: 100%;
+  height: 2.5rem;
+  background: linear-gradient(90deg, 
+    color-mix(in srgb, var(--primary-color) 30%, transparent) 0%, 
+    color-mix(in srgb, var(--primary-color) 40%, transparent) 50%, 
+    color-mix(in srgb, var(--primary-color) 30%, transparent) 100%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  margin-top: 1rem;
+  animation: skeleton-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* --- Empty State --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.empty-state-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary-color) 10%, transparent) 0%, 
+    color-mix(in srgb, var(--primary-color) 5%, transparent) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: empty-state-float 3s ease-in-out infinite;
+}
+
+.empty-state-icon i {
+  font-size: 3.5rem;
+  color: var(--muted-text);
+  opacity: 0.6;
+}
+
+@keyframes empty-state-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.empty-state-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.empty-state-message {
+  font-size: 1.125rem;
+  color: var(--secondary-text);
+  max-width: 500px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.empty-state-suggestions {
+  background: color-mix(in srgb, var(--info-bg) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--info-color) 20%, transparent);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 500px;
+  text-align: left;
+}
+
+.empty-state-suggestions h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.empty-state-suggestions h4 i {
+  color: var(--info-color);
+  font-size: 1.25rem;
+}
+
+.empty-state-suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.empty-state-suggestions li {
+  color: var(--secondary-text);
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.empty-state-suggestions li::before {
+  content: "•";
+  position: absolute;
+  left: 0.5rem;
+  color: var(--info-color);
+  font-weight: bold;
+}
+
+/* --- Error State --- */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.error-state-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--error-color) 10%, transparent) 0%, 
+    color-mix(in srgb, var(--error-color) 5%, transparent) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: error-state-shake 0.5s ease-in-out;
+}
+
+.error-state-icon i {
+  font-size: 3.5rem;
+  color: var(--error-color);
+  opacity: 0.8;
+}
+
+@keyframes error-state-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.error-state-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.error-state-message {
+  font-size: 1.125rem;
+  color: var(--secondary-text);
+  max-width: 500px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.error-state-details {
+  background: var(--error-bg);
+  border: 1px solid color-mix(in srgb, var(--error-color) 30%, transparent);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.error-state-details code {
+  color: var(--error-color);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.retry-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: var(--primary-color);
+  color: var(--primary-text);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) var(--transition-ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.retry-button:hover {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.retry-button:active {
+  transform: translateY(0);
+}
+
+.retry-button i {
+  font-size: 1.25rem;
+}
+
+/* Spinner for retry button */
+.retry-button.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.retry-button.loading i {
+  animation: retry-spin 1s linear infinite;
+}
+
+@keyframes retry-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .skeleton-loader {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .empty-state,
+  .error-state {
+    padding: 3rem 1.5rem;
+    min-height: 350px;
+  }
+  
+  .empty-state-icon,
+  .error-state-icon {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .empty-state-icon i,
+  .error-state-icon i {
+    font-size: 3rem;
+  }
+  
+  .empty-state-title,
+  .error-state-title {
+    font-size: 1.5rem;
+  }
+  
+  .empty-state-message,
+  .error-state-message {
+    font-size: 1rem;
+  }
+  
+  .empty-state-suggestions {
+    padding: 1.25rem;
+  }
+}
