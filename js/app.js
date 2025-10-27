@@ -550,10 +550,20 @@ async function renderCart(container, totalSpan) {
     }
     total += itemTotal;
 
-    // Get product image
-    const productImage = product.images && product.images.length > 0 
-      ? `images/${product.images[0]}` 
-      : 'images/placeholder.jpg';
+    // Get product image using the helper function
+    const productImage = getPrimaryImage(product) || 'images/placeholder.jpg';
+
+    // Check stock status
+    let stockWarning = '';
+    if (product.stock !== undefined) {
+      if (qty > product.stock) {
+        stockWarning = `<p class="stock-warning" style="color: var(--error-color); font-size: 0.875rem; margin: 0.25rem 0 0 0;">⚠️ Only ${product.stock} available</p>`;
+      } else if (product.stock <= 5 && product.stock > 0) {
+        stockWarning = `<p class="stock-warning" style="color: var(--warning-color); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Only ${product.stock} left in stock</p>`;
+      } else if (product.stock === 0) {
+        stockWarning = `<p class="stock-warning" style="color: var(--error-color); font-size: 0.875rem; margin: 0.25rem 0 0 0; font-weight: 600;">Out of stock</p>`;
+      }
+    }
 
     const itemEl = document.createElement('div');
     itemEl.className = 'cart-item';
@@ -564,6 +574,7 @@ async function renderCart(container, totalSpan) {
       <div class="cart-item-info">
         <h3 class="cart-item-name">${product.name}</h3>
         <p class="cart-item-price">${priceDisplay}</p>
+        ${stockWarning}
       </div>
       <div class="cart-item-quantity">
         <button class="quantity-change" data-id="${id}" data-change="-1" aria-label="Decrease quantity">−</button>
@@ -859,7 +870,7 @@ async function initCartPage() {
 
   await renderCart(cartContainer, totalSpan);
 
-  cartContainer.addEventListener('click', (e) => {
+  cartContainer.addEventListener('click', async (e) => {
     const target = e.target;
     const productId = target.getAttribute('data-id');
 
@@ -870,7 +881,19 @@ async function initCartPage() {
       const change = parseInt(target.getAttribute('data-change'), 10);
       const cart = getCart();
       const currentQty = cart.get(productId) || 0;
-      updateCartQuantity(productId, currentQty + change);
+      const newQty = currentQty + change;
+      
+      // Check stock availability if increasing quantity
+      if (change > 0) {
+        const allProducts = await fetchProducts();
+        const product = allProducts.find(p => String(p.id) === productId);
+        if (product && product.stock !== undefined && newQty > product.stock) {
+          alert(`Sorry, only ${product.stock} items available in stock.`);
+          return;
+        }
+      }
+      
+      updateCartQuantity(productId, newQty);
       renderCart(cartContainer, totalSpan); // Re-render
     }
   });
@@ -905,7 +928,8 @@ async function initCheckoutForm() {
     for (const [id, qty] of cart.entries()) {
       const product = productMap.get(id);
       if (!product) continue;
-      const price = Number(product.price) || 0;
+      // Use discounted price if available
+      const price = product.discount ? (Number(product.discountedPrice) || 0) : (Number(product.price) || 0);
       total += price * qty;
       lines.push(`- ${qty}x ${product.name} - EGP ${(price * qty).toFixed(2)}`);
     }
