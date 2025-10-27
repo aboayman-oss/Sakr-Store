@@ -578,11 +578,11 @@ async function renderCart(container, totalSpan) {
     let stockWarning = '';
     if (product.stock !== undefined) {
       if (qty > product.stock) {
-        stockWarning = `<p class="stock-warning" style="color: var(--error-color); font-size: 0.875rem; margin: 0.25rem 0 0 0;">⚠️ Only ${product.stock} available</p>`;
+        stockWarning = `<p class="stock-warning error">⚠️ Only ${product.stock} available</p>`;
       } else if (product.stock <= 5 && product.stock > 0) {
-        stockWarning = `<p class="stock-warning" style="color: var(--warning-color); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Only ${product.stock} left in stock</p>`;
+        stockWarning = `<p class="stock-warning warning">⚠️ Only ${product.stock} left in stock</p>`;
       } else if (product.stock === 0) {
-        stockWarning = `<p class="stock-warning" style="color: var(--error-color); font-size: 0.875rem; margin: 0.25rem 0 0 0; font-weight: 600;">Out of stock</p>`;
+        stockWarning = `<p class="stock-warning out-of-stock">⛔ Out of stock</p>`;
       }
     }
 
