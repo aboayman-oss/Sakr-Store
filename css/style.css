@@ -1196,7 +1196,7 @@ nav a:hover {
 .sale-badge {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   color: #ffffff;
   font-size: 0.75rem;
@@ -1211,6 +1211,11 @@ nav a:hover {
   align-items: center;
   gap: 0.375rem;
   animation: pulse-sale-badge 2s ease-in-out infinite;
+}
+
+/* When both badges are present, move sale badge below new badge */
+.new-badge ~ .sale-badge {
+  top: 52px;
 }
 
 .sale-badge::before {
